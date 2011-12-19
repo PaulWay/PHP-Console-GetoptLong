@@ -9,6 +9,7 @@
 # http://www.gnu.org/licenses/gpl-3.0.txt
 
 # Version 1.0 - initial release.
+# Version 1.1 - added array output for mandatory arguments
 
 function GOCheckType($arg, $type) {
     if ($type == 's') {
@@ -27,37 +28,40 @@ function GetOptions($argDescriptions) {
 	# Preprocess argument descriptions to look up names and info
 	$arg_lookup = array();
 	# foreach key => val doesn't respect references - use keys only
-	foreach (array_keys($argDescriptions) as $key) {
+	foreach (array_keys($argDescriptions) as $argdesc) {
 		# Pull apart the arguments into a list of synonyms and then the
 		# (optional) option information.
 		# Make sure we reference the reference
-		$opt_info = array('var' => &$argDescriptions[$key]);
-		# Should we do this with a regex?
-		if        ($p = strpos($key, '=')) {
-			# = == mandatory argument
-			$opt_info['opt'] = '=';
-			$opt_info['type'] = substr($key, $p+1, 1);
-			# assert $p > 0
-			$key = substr($key, 0, $p);
-		} else if ($p = strpos($key, ':')) {
-			# : == optional argument
-			$opt_info['opt'] = ':';
-			$opt_info['type'] = substr($key, $p+1, 1);
-			# assert $p > 0
-			$key = substr($key, 0, $p);
-		} else if ($p = strpos($key, '+')) {
-			# + == incrementing argument
-			$opt_info['opt'] = '+';
-			# assert $p > 0
-			$key = substr($key, 0, $p);
-		} # else no modifier
-		foreach( explode('|', $key) as $synonym) {
-		    if (strlen($key) < 1) {
-		        print("Warning: key $key started or ended with |.\n");
+		$opt_info = array('var' => &$argDescriptions[$argdesc]);
+		# Get the synonyms and the optional options
+	    preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|\+)?$}', $argdesc, $matches);
+		if (empty($matches)) {
+			die("GetOptions Error: do not recognise description '$argdesc'\n");
+		}
+		$synonyms = $matches[1];
+		if (count($matches) > 2) {
+			$optstr = $matches[2];
+			if ($optstr == '+') {
+				$opt_info['opt'] = '+';
+			} else {
+				# Options of the form [=:][sif]@?
+				$opt_info['opt'] = substr($optstr,0,1);
+				$opt_info['type'] = substr($optstr,1,1);
+				if (strlen($optstr) > 2) {
+					$opt_info['array'] = substr($optstr,2,1);
+				}
+				if ($debug) {
+					print("Opt info opt = $opt_info[opt], type = $opt_info[type]\n");
+				}
+			}
+		}
+		foreach( explode('|', $synonyms) as $synonym) {
+		    if (strlen($synonym) < 1) {
+		        print("Warning: key $synonyms started or ended with |.\n");
 		        continue;
 		    }
 			if ($debug) {
-			    print("Putting synonym $synonym of $key in arg_lookup\n");
+			    print("Putting synonym $synonym of $synonyms in arg_lookup\n");
 		    }
 			$arg_lookup[$synonym] = $opt_info;
 		}
