@@ -2,7 +2,7 @@
 
 require_once "../getopt_long.php";
 
-$args = GetOptions();
+$args = GetOptions(array());
 
 echo '(', implode(',',$args), ")\n";
 
