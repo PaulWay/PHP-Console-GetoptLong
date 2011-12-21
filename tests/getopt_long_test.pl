@@ -3,13 +3,27 @@
 use warnings;
 use strict;
 
+my @tests;
+
 while (<>) {
     chomp;
     next if m{^#};
-    my ($desc, $args, $expected) = split(":",$_);
-    next unless $desc and $args and $expected;
-    my $actual = qx{php getopt_long.php $args};
+    my @args = split(":",$_);
+    next unless scalar @args == 4;
+    push @tests, \@args;
+}
+
+# Test anywhere protocol:
+print "1..",scalar @tests, "\n";
+my $testno = 0;
+foreach my $aref (@tests) {
+	$testno++;
+	my ($description, $testprog, $args, $expected) = @$aref;
+    my $actual = qx{php test_$testprog.php $args};
     chomp $actual;
-    my $result = ($expected eq $actual) ? "Success" : "fail";
-    print "Test $desc: args=$args, expected $expected, actual $actual; result = $result\n";
+    if ($expected eq $actual) {
+		print "ok $testno $description.\n";
+	} else {
+		print "not ok $testno $description: wanted $expected, got $actual.\n";
+	}
 }
