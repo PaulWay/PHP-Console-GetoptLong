@@ -4,6 +4,8 @@
 # Perl Getopt::Long module to PHP.  Written and copyright by Paul Wayper.
 # Released to the world in December 2011.
 #
+# vim:ts=4:autoindent
+#
 # This software library is licensed under the GPL version 3.0.  If you do not
 # have a copy of this license, you can find one at
 # http://www.gnu.org/licenses/gpl-3.0.txt
