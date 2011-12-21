@@ -31,8 +31,13 @@
    <file baseinstalldir="/" name="getopt_long.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
-   <file baseinstalldir="/" name="getopt_long_test.pl" role="test" />
-   <file baseinstalldir="/" name="getopt_long_tests.txt" role="test" />
+   <file baseinstalldir="/tests" name="tests/getopt_long_test.pl" role="test" />
+   <file baseinstalldir="/tests" name="tests/getopt_long_tests.txt" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_noargs.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_flag.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_single.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_optional_single.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_increment.php" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
  </contents>
