@@ -44,11 +44,11 @@ function GetOptions($argDescriptions) {
 			if ($optstr == '+') {
 				$opt_info['opt'] = '+';
 			} else {
-				# Options of the form [=:][sif]@?
+				# Options of the form [=:][sif]@? - option type, variable type, destination
 				$opt_info['opt'] = substr($optstr,0,1);
 				$opt_info['type'] = substr($optstr,1,1);
 				if (strlen($optstr) > 2) {
-					$opt_info['array'] = substr($optstr,2,1);
+					$opt_info['dest'] = substr($optstr,2,1);
 				}
 				if ($debug) {
 					print("Opt info opt = $opt_info[opt], type = $opt_info[type]\n");
@@ -106,11 +106,34 @@ function GetOptions($argDescriptions) {
 							# Yes: set the variable from the argument list
 							# We're even allowed to take things that look
 							# like options here!
-		                    if ($debug) {
-    							print("  it takes a parameter: setting its variable to $args[$i]\n");
-	                        }
 							# Check its type here.
-							$opt_info['var'] = $args[$i];
+							if (array_key_exists('dest',$opt_info) and $opt_info['dest'] == '@') {
+								# Explicitly require array
+								# variable may not be array - convert if so
+								if (is_array($opt_info['var'])) {
+						            if ($debug) {
+										print("  it takes an array parameter and is one: pushing $args[$i] to it\n");
+					                }
+									$opt_info['var'][] = $args[$i]; # Push to array
+								} else {
+						            if ($debug) {
+										print("  it takes an array parameter and isn't one: setting its variable to an array of ($args[$i])\n");
+					                }
+									# Convert to two-value array.
+									$opt_info['var'] = array($args[$i]);
+								}
+							} else if (is_array($opt_info['var'])) {
+				                if ($debug) {
+									print("  it takes a parameter and we've been given an array: pushing $args[$i] onto it\n");
+			                    }
+								# @ not specified but array reference given
+								$opt_info['var'][] = $args[$i]; # Push to array
+							} else {
+				                if ($debug) {
+									print("  it takes a parameter: setting its variable to $args[$i]\n");
+			                    }
+								$opt_info['var'] = $args[$i];
+							}
 						} else {
 							# No: fail.
 							die("GetOptions: argument $arg missing its parameter\n");
@@ -166,17 +189,4 @@ function GetOptions($argDescriptions) {
 	}
 	return $unprocessed_args;
 }
-
-$verbose = 0;
-$file = "";
-$optarg = "";
-$inc = 0;
-$new_argv = GetOptions(array(
-	'verbose|v'		=> &$verbose,
-	'file|f=s'      => &$file,
-	'opt|o:s'       => &$opt,
-	'inc|i+'        => &$inc,
-));
-
-echo "$verbose,$file,$opt,$inc,(", implode(',',$new_argv), ")\n";
 
