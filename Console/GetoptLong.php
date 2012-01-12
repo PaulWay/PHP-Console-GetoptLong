@@ -6,14 +6,31 @@
 #
 # vim:ts=4:autoindent
 #
-# This software library is licensed under the GPL version 3.0.  If you do not
-# have a copy of this license, you can find one at
-# http://www.gnu.org/licenses/gpl-3.0.txt
+# This software library is licensed under the PHP version 3.01 license.
+# If you do not have a copy of this license, you can find one at
+# http://www.php.net/license/3_01.txt
 
 # Version 1.0 - initial release.
 # Version 1.1 - added array output for mandatory arguments
+# Version 1.2 - try to make it more like a PEAR package
 
-function GOCheckType($arg, $type) {
+/**
+ * @category  Console
+ * @package   Console_GetoptLong
+ * @author    Paul Wayper <paulway@mabula.net>
+ * @copyright 2012 Paul Wayper
+ * @license   http://www.php.net/license/3_01.txt PHP 3.01
+ * @version   Release:
+ * @package   _version@
+ * @link      http://pear.php.net/package/Console_GetoptLong
+ * @link      http://tangram.dnsalias.net/repos/PWphp/getopt_long
+ */
+
+require_once "PEAR.php";
+
+class Console_GetoptPlus {
+
+private function GOCheckType($arg, $type) {
     if ($type == 's') {
         # Everything's a string
         return TRUE;
@@ -191,4 +208,6 @@ function GetOptions($argDescriptions) {
 	}
 	return $unprocessed_args;
 }
+
+} # End of class definition
 
