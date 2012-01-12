@@ -1,9 +1,9 @@
 <?php
 
-require_once "../getopt_long.php";
+require_once "../Console/GetoptLong.php";
 
 $mandatory = '';
-$args = GetOptions(array(
+$args = Console_GetoptLong::GetOptions(array(
 	'mandatory|m=s@'		=> &$mandatory,
 ));
 

@@ -1,9 +1,9 @@
 <?php
 
-require_once "../getopt_long.php";
+require_once "../Console/GetoptLong.php";
 
 $verbose = 0;
-$args = GetOptions(array(
+$args = Console_GetoptLong::GetOptions(array(
 	'verbose|v'		=> &$verbose,
 ));
 

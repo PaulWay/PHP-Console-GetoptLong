@@ -1,9 +1,9 @@
 <?php
 
-require_once "../getopt_long.php";
+require_once "../Console/GetoptLong.php";
 
 $optional = '';
-$args = GetOptions(array(
+$args = Console_GetoptLong::GetOptions(array(
 	'optional|o:s'		=> &$optional,
 ));
 

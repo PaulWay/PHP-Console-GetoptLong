@@ -5,6 +5,7 @@ use strict;
 
 my @tests;
 
+# Read all tests so we know how many we're doing.
 while (<>) {
     chomp;
     next if m{^#};

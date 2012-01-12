@@ -1,9 +1,9 @@
 <?php
 
-require_once "../getopt_long.php";
+require_once "../Console/GetoptLong.php";
 
 $increment = 0;
-$args = GetOptions(array(
+$args = Console_GetoptLong::GetOptions(array(
 	'increment|i+'		=> &$increment,
 ));
 
