@@ -28,7 +28,7 @@
 
 require_once "PEAR.php";
 
-class Console_GetoptPlus {
+class Console_GetoptLong {
 
 private function GOCheckType($arg, $type) {
     if ($type == 's') {
