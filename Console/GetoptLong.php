@@ -73,11 +73,14 @@ class Console_GetoptLong
     private function _checkType($arg, $type)
     {
         if ($type == 's') {
+            Console_GetoptLong::_debug("  Checking $arg is a string - duh\n");
             // Everything's a string
             return true;
         } else if ($type == 'i') {
-            return (floor($arg) == $arg);
+            Console_GetoptLong::_debug("  Checking $arg is an integer\n");
+            return (is_numeric($arg) && floor($arg) == $arg);
         } else if ($type == 'f') {
+            Console_GetoptLong::_debug("  Checking $arg is a float\n");
             return is_numeric($arg);
         } else {
             print("Warning: unknown type check '$type'.\n");
@@ -158,7 +161,7 @@ class Console_GetoptLong
             // Get the synonyms and the optional options
             preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|\+)?$}', $argdesc, $matches);
             if (empty($matches) === true) {
-                die("GetOptions Error: do not recognise description '$argdesc'\n");
+                die("Do not recognise description '$argdesc'\n");
             }
 
             $synonyms = $matches[1];
@@ -248,13 +251,13 @@ class Console_GetoptLong
                                 // We're even allowed to take things that look
                                 // like options here!
                                 if (! Console_GetoptLong::_checkType(
-                                    $arg, $optInfo['type']
+                                    $args[$i], $optInfo['type']
                                 )) {
                                     die(
-                                        "Error: $opt argument requires a "
-                                        . Console_Getopt::$_typeLookup[
+                                        "$arg argument requires a "
+                                        . Console_GetoptLong::$_typeLookup[
                                             $optInfo['type']
-                                        ]
+                                        ] . "\n"
                                     );
                                 }
                                 if (array_key_exists('dest', $optInfo) === true
@@ -300,10 +303,7 @@ class Console_GetoptLong
                                 }
                             } else {
                                 // No: fail.
-                                die(
-                                    "GetOptions: argument $arg missing its "
-                                    . "parameter\n"
-                                );
+                                die("Argument $arg missing its parameter\n");
                             }//end if
                         } else if ($opt === ':') {
                             // optional argument
@@ -334,13 +334,13 @@ class Console_GetoptLong
                                     );
 
                                     if (! Console_GetoptLong::_checkType(
-                                        $arg, $optInfo['type']
+                                        $args[$i], $optInfo['type']
                                     )) {
                                         die(
-                                            "Error: $opt argument requires a "
-                                            . Console_Getopt::$_typeLookup[
+                                            "$arg argument requires a "
+                                            . Console_GetoptLong::$_typeLookup[
                                                 $optInfo['type']
-                                            ]
+                                            ] . "\n"
                                         );
                                     }
                                     $var = $args[$i];
