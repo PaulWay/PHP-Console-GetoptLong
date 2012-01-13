@@ -35,6 +35,18 @@ class Console_GetoptLong
      * @access private
      */
     private static $_debug = false;
+
+    /**
+     * Lookup of type letters to words
+     *
+     * @var    array
+     * @access private
+     */
+    private static $_typeLookup = array(
+        's' => 'string',
+        'i' => 'integer',
+        'f' => 'float',
+    );
     
     /**
      * _debug - print string if in debugging mode
@@ -235,7 +247,16 @@ class Console_GetoptLong
                                 // Yes: set the variable from the argument list
                                 // We're even allowed to take things that look
                                 // like options here!
-                                // Check its type here.
+                                if (! Console_GetoptLong::_checkType(
+                                    $arg, $optInfo['type']
+                                )) {
+                                    die(
+                                        "Error: $opt argument requires a "
+                                        . Console_Getopt::$_typeLookup[
+                                            $optInfo['type']
+                                        ]
+                                    );
+                                }
                                 if (array_key_exists('dest', $optInfo) === true
                                     && $optInfo['dest'] === '@'
                                 ) {
@@ -312,7 +333,16 @@ class Console_GetoptLong
                                         . " variable to $args[$i]\n"
                                     );
 
-                                    // Check its type here.
+                                    if (! Console_GetoptLong::_checkType(
+                                        $arg, $optInfo['type']
+                                    )) {
+                                        die(
+                                            "Error: $opt argument requires a "
+                                            . Console_Getopt::$_typeLookup[
+                                                $optInfo['type']
+                                            ]
+                                        );
+                                    }
                                     $var = $args[$i];
                                 }
                             }//end if
