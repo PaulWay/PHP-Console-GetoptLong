@@ -8,13 +8,20 @@ Verbose (long double-dash):flag:--verbose:1,()
 Verbose with arg before:flag:foo -v:1,(foo)
 Verbose with arg before:flag:-v foo:1,(foo)
 Verbose twice (just set):flag:-v -v:1,()
-# Mandatory arguments (@ specified, string given)
+# Mandatory arguments (string)
 Mandatory arg (short):mandatory_single:-m file:file,()
 Mandatory arg (long):mandatory_single:-mandatory file:file,()
 Mandatory arg (long double-dash):mandatory_single:--mandatory file:file,()
 Mandatory arg with arg before:mandatory_single:foo -m file:file,(foo)
 Mandatory arg with arg after:mandatory_single:-m file foo:file,(foo)
 Mandatory arg twice (latter value):mandatory_single:-m file1 -m file2:file2,()
+Mandatory arg error if not supplied:mandatory_single:-m:Argument -m missing its parameter
+# Mandatory arguments (integer)
+Mandatory arg integer normal:mandatory_integer:-m 1:1,()
+Mandatory arg integer largish:mandatory_integer:-m 16777216:16777216,()
+Mandatory arg integer negative:mandatory_integer:-m -1:-1,()
+Mandatory arg error on string:mandatory_integer:-m foo:-m argument requires a integer
+Mandatory arg error on float:mandatory_integer:-m 3.14:-m argument requires a integer
 # Mandatory arguments into an array - explicit @ declaration in GetOptions
 Mandatory arg array explicit (short):mandatory_array_explicit:-m file1 -m file2:(file1,file2),()
 Mandatory arg array explicit (long):mandatory_array_explicit:-mandatory file1 -mandatory file2:(file1,file2),()
