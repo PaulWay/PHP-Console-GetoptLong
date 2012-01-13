@@ -3,7 +3,7 @@
 require_once "../Console/GetoptLong.php";
 
 $increment = 0;
-$args = Console_GetoptLong::GetOptions(array(
+$args = Console_GetoptLong::getOptions(array(
 	'increment|i+'		=> &$increment,
 ));
 

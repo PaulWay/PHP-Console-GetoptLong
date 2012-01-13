@@ -3,7 +3,7 @@
 require_once "../Console/GetoptLong.php";
 
 $optional = '';
-$args = Console_GetoptLong::GetOptions(array(
+$args = Console_GetoptLong::getOptions(array(
 	'optional|o:s'		=> &$optional,
 ));
 
