@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-01-13</date>
- <time>23:23:00</time>
+ <date>2012-01-14</date>
+ <time>00:42:00</time>
  <version>
-  <release>1.3.0</release>
+  <release>1.4.0</release>
   <api>1.0</api>
  </version>
  <stability>
@@ -25,8 +25,7 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Incorporating style changes from Greg Sherwood to match PHP's preferred
-coding style.</notes>
+ <notes>We now actually check the arguments are the type required.</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -55,6 +54,19 @@ coding style.</notes>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.4.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-14</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now actually check the arguments are the type required</notes>
+  </release>
   <release>
    <version>
     <release>1.3.0</release>
