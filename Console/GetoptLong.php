@@ -51,6 +51,27 @@ class Console_GetoptLong
     }
     
     /**
+     * Check argument against type spec and return true if it is that type.
+     * 
+     * @param string $arg  the argument to check
+     * @param string $type the type spec ('s', 'i' or 'f')
+     *
+     * @return boolean whether the argument is of the specified type.
+     */
+    private function _checkType($arg, $type)
+    {
+        if ($type == 's') {
+            // Everything's a string
+            return true;
+        } else if ($type == 'i') {
+            return (floor($arg) == $arg);
+        } else if ($type == 'f') {
+            return is_numeric($arg);
+        } else {
+            print("Warning: unknown type check '$type'.\n");
+        }
+    }
+    /**
      * getOptions - set referenced variables from argument descriptions.
      *
      * This is the only function you will usually call in this module.
@@ -195,9 +216,12 @@ class Console_GetoptLong
                 Console_GetoptLong::_debug(" Looks like option $opt.\n");
 
                 if (array_key_exists($opt, $arg_lookup) === true) {
-                    Console_GetoptLong::_debug("  And it's an option we recognise\n");
+                    Console_GetoptLong::_debug(
+                        "  And it's an option we recognise\n"
+                    );
 
                     $optInfo = $arg_lookup[$opt];
+                    $var = &$optInfo['var'];
 
                     // Does it have any arguments?
                     if (array_key_exists('opt', $optInfo) === true) {
@@ -217,14 +241,14 @@ class Console_GetoptLong
                                 ) {
                                     // Explicitly require array
                                     // variable may not be array - convert if so
-                                    if (is_array($optInfo['var']) === true) {
+                                    if (is_array($var) === true) {
                                         Console_GetoptLong::_debug(
                                             "  it takes an array parameter and "
                                             . "is one: pushing $args[$i] to it\n"
                                         );
 
                                         // Push to array
-                                        $optInfo['var'][] = $args[$i]; 
+                                        $var[] = $args[$i]; 
                                     } else {
                                         Console_GetoptLong::_debug(
                                             "  it takes an array parameter and"
@@ -232,10 +256,10 @@ class Console_GetoptLong
                                             . " to an array of ($args[$i])\n"
                                         );
 
-                                        // Convert to two-value array.
-                                        $optInfo['var'] = array($args[$i]);
+                                        // Start with an array.
+                                        $var = array($args[$i]);
                                     }
-                                } else if (is_array($optInfo['var']) === true) {
+                                } else if (is_array($var) === true) {
                                     Console_GetoptLong::_debug(
                                         "  it takes a parameter and we've been"
                                         . " given an array: pushing $args[$i] "
@@ -244,14 +268,14 @@ class Console_GetoptLong
 
                                     // @ not specified but array reference given
                                     // Push to array
-                                    $optInfo['var'][] = $args[$i];
+                                    $var[] = $args[$i];
                                 } else {
                                     Console_GetoptLong::_debug(
                                         "  it takes a parameter: setting its"
                                         . " variable to $args[$i]\n"
                                     );
 
-                                    $optInfo['var'] = $args[$i];
+                                    $var = $args[$i];
                                 }
                             } else {
                                 // No: fail.
@@ -269,7 +293,7 @@ class Console_GetoptLong
                                     "  optional argument, none available: value 1\n"
                                 );
 
-                                $optInfo['var'] = 1;
+                                $var = 1;
                             } else {
                                 // Does the next option look like a flag?
                                 if (substr($args[($i+1)], 0, 1) === '-') {
@@ -279,7 +303,7 @@ class Console_GetoptLong
                                         ." '-': value 1\n"
                                     );
 
-                                    $optInfo['var'] = 1;
+                                    $var = 1;
                                 } else {
                                     // No - it must be an argument, consume it
                                     $i++;
@@ -289,12 +313,12 @@ class Console_GetoptLong
                                     );
 
                                     // Check its type here.
-                                    $optInfo['var'] = $args[$i];
+                                    $var = $args[$i];
                                 }
                             }//end if
                         } else if ($opt === '+') {
                             // incrementing argument
-                            $optInfo['var'] ++;
+                            $var ++;
                             Console_GetoptLong::_debug(
                                 "  it's an incrementing argument, setting its"
                                 . " variable to $optInfo[var]\n"
@@ -304,10 +328,10 @@ class Console_GetoptLong
                         // No args, just a boolean, set it:
                         Console_GetoptLong::_debug(
                             "  it's a boolean: setting its variable from "
-                            . "$optInfo[var] to 1\n"
+                            . "$var to 1\n"
                         );
 
-                        $optInfo['var'] = 1;
+                        $var = 1;
                     }
                 } else {
                     // Not a recognised argument argument: leave it unprocessed.
