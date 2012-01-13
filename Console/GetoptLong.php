@@ -5,6 +5,13 @@
  *
  * PHP version 5
  *
+ * @category  Console
+ * @package   Console_GetoptLong
+ * @author    Paul Wayper <paulway@mabula.net>
+ * @copyright 2012 Paul Wayper
+ * @license   http://www.php.net/license/3_01.txt PHP 3.01
+ * @svn       $Id: $
+ * @link      <pear package page URL>
  */
 
  /**
@@ -21,6 +28,28 @@
 class Console_GetoptLong
 {
 
+    /**
+     * Are we debugging mode?
+     *
+     * @var    boolean
+     * @access private
+     */
+    private static $_debug = false;
+    
+    /**
+     * _debug - print string if in debugging mode
+     * 
+     * @param string $string the string to print
+     *
+     * @return none
+     */
+    private function _debug($string)
+    {
+        if (Console_GetoptLong::$_debug) {
+            echo $string;
+        }
+    }
+    
     /**
      * getOptions - set referenced variables from argument descriptions.
      *
@@ -79,10 +108,9 @@ class Console_GetoptLong
      * Which would then return an array with the word 'convert_to_proteins'.
      *
      */
-     
+    
     function getOptions($argDescriptions)
     {
-        $debug = false;
 
         // Preprocess argument descriptions to look up names and info
         $arg_lookup = array();
@@ -114,9 +142,9 @@ class Console_GetoptLong
                         $optInfo['dest'] = substr($optstr, 2, 1);
                     }
 
-                    if ($debug) {
-                        print("Opt info opt = $optInfo[opt], type = $optInfo[type]\n");
-                    }
+                    Console_GetoptLong::_debug(
+                        "Opt info opt = $optInfo[opt], type = $optInfo[type]\n"
+                    );
                 }
             }
 
@@ -126,9 +154,9 @@ class Console_GetoptLong
                     continue;
                 }
 
-                if ($debug) {
-                    print("Putting synonym $synonym of $synonyms in arg_lookup\n");
-                }
+                Console_GetoptLong::_debug(
+                    "Putting synonym $synonym of $synonyms in arg_lookup\n"
+                );
 
                 $arg_lookup[$synonym] = $optInfo;
             }
@@ -145,9 +173,7 @@ class Console_GetoptLong
         $numArgs = count($args);
         while ($i < $numArgs) {
             $arg = $args[$i];
-            if ($debug) {
-                print("Processing argument $i: $arg\n");
-            }
+            Console_GetoptLong::_debug("Processing argument $i: $arg\n");
 
             if ($arg === '--') {
                 // Process no more arguments and exit while loop now.
@@ -166,14 +192,10 @@ class Console_GetoptLong
                     $opt = substr($arg, 1);
                 }
 
-                if ($debug) {
-                    print(" Looks like option $opt.\n");
-                }
+                Console_GetoptLong::_debug(" Looks like option $opt.\n");
 
                 if (array_key_exists($opt, $arg_lookup) === true) {
-                    if ($debug) {
-                        print("  And it's an option we recognise\n");
-                    }
+                    Console_GetoptLong::_debug("  And it's an option we recognise\n");
 
                     $optInfo = $arg_lookup[$opt];
 
@@ -196,64 +218,75 @@ class Console_GetoptLong
                                     // Explicitly require array
                                     // variable may not be array - convert if so
                                     if (is_array($optInfo['var']) === true) {
-                                        if ($debug) {
-                                            print("  it takes an array parameter and is one: pushing $args[$i] to it\n");
-                                        }
+                                        Console_GetoptLong::_debug(
+                                            "  it takes an array parameter and "
+                                            . "is one: pushing $args[$i] to it\n"
+                                        );
 
                                         // Push to array
                                         $optInfo['var'][] = $args[$i]; 
                                     } else {
-                                        if ($debug) {
-                                            print("  it takes an array parameter and isn't one: setting its variable to an array of ($args[$i])\n");
-                                        }
+                                        Console_GetoptLong::_debug(
+                                            "  it takes an array parameter and"
+                                            . " isn't one: setting its variable"
+                                            . " to an array of ($args[$i])\n"
+                                        );
 
                                         // Convert to two-value array.
                                         $optInfo['var'] = array($args[$i]);
                                     }
                                 } else if (is_array($optInfo['var']) === true) {
-                                    if ($debug) {
-                                        print("  it takes a parameter and we've been given an array: pushing $args[$i] onto it\n");
-                                    }
+                                    Console_GetoptLong::_debug(
+                                        "  it takes a parameter and we've been"
+                                        . " given an array: pushing $args[$i] "
+                                        . "onto it\n"
+                                    );
 
                                     // @ not specified but array reference given
                                     // Push to array
                                     $optInfo['var'][] = $args[$i];
                                 } else {
-                                    if ($debug) {
-                                        print("  it takes a parameter: setting its variable to $args[$i]\n");
-                                    }
+                                    Console_GetoptLong::_debug(
+                                        "  it takes a parameter: setting its"
+                                        . " variable to $args[$i]\n"
+                                    );
 
                                     $optInfo['var'] = $args[$i];
                                 }
                             } else {
                                 // No: fail.
-                                die("GetOptions: argument $arg missing its parameter\n");
+                                die(
+                                    "GetOptions: argument $arg missing its "
+                                    . "parameter\n"
+                                );
                             }//end if
                         } else if ($opt === ':') {
                             // optional argument
                             // Is there still another option left?
                             if (($i + 1) === $numArgs) {
                                 // No - no argument supplied, set the variable to 1
-                                if ($debug) {
-                                    print("  optional argument, none available: value 1\n");
-                                }
+                                Console_GetoptLong::_debug(
+                                    "  optional argument, none available: value 1\n"
+                                );
 
                                 $optInfo['var'] = 1;
                             } else {
                                 // Does the next option look like a flag?
                                 if (substr($args[($i+1)], 0, 1) === '-') {
                                     // Yes - no argument supplied, set variable to 1
-                                    if ($debug) {
-                                        print("  optional argument, next one starts with '-': value 1\n");
-                                    }
+                                    Console_GetoptLong::_debug(
+                                        "  optional argument, next one starts with"
+                                        ." '-': value 1\n"
+                                    );
 
                                     $optInfo['var'] = 1;
                                 } else {
                                     // No - it must be an argument, consume it
                                     $i++;
-                                    if ($debug) {
-                                        print("  optional argument, one supplied, setting variable to $args[$i]\n");
-                                    }
+                                    Console_GetoptLong::_debug(
+                                        "  optional argument, one supplied, setting"
+                                        . " variable to $args[$i]\n"
+                                    );
 
                                     // Check its type here.
                                     $optInfo['var'] = $args[$i];
@@ -262,15 +295,17 @@ class Console_GetoptLong
                         } else if ($opt === '+') {
                             // incrementing argument
                             $optInfo['var'] ++;
-                            if ($debug) {
-                                print("  it's an incrementing argument, setting its variable to $optInfo[var]\n");
-                            }
+                            Console_GetoptLong::_debug(
+                                "  it's an incrementing argument, setting its"
+                                . " variable to $optInfo[var]\n"
+                            );
                         }
                     } else {
                         // No args, just a boolean, set it:
-                        if ($debug) {
-                            print("  it's a boolean: setting its variable from $optInfo[var] to 1\n");
-                        }
+                        Console_GetoptLong::_debug(
+                            "  it's a boolean: setting its variable from "
+                            . "$optInfo[var] to 1\n"
+                        );
 
                         $optInfo['var'] = 1;
                     }
