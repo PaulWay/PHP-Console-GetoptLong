@@ -5,12 +5,6 @@
  *
  * PHP version 5
  *
- * @category  Console
- * @package   Console_GetoptLong
- * @author    Paul Wayper <paulway@mabula.net>
- * @copyright 2012 Paul Wayper
- * @license   <licence URL> <lincence name>
- * @link      <pear package page URL>
  */
 
  /**
@@ -20,24 +14,72 @@
  * @package   Console_GetoptLong
  * @author    Paul Wayper <paulway@mabula.net>
  * @copyright 2012 Paul Wayper
- * @license   <licence URL> <lincence name>
- * @version   Release: @package_version@
+ * @license   http://www.php.net/license/3_01.txt PHP 3.01
+ * @version   Release: 1.3.0
  * @link      <pear package page URL>
  */
 class Console_GetoptLong
 {
 
-
     /**
-     * One line function comment.
+     * getOptions - set referenced variables from argument descriptions.
      *
-     * Info about how to use could go here, including lots of info on
-     * the argument and the format of the return value.
+     * This is the only function you will usually call in this module.
+     * It takes an array where the keys are descriptions of how each
+     * option should be processed and the values are references to the
+     * variable to set when that option is supplied on the command line.
      *
-     * @param array $argDescriptions Short description here.
+     * @param array $argDescriptions Describing the arguments to the program.
      *
-     * @return array
+     * The arguments are described in description => reference pairs.
+     *
+     * The description is a list of synonyms (separated by | characters)
+     * possibly followed by a specifier for the arguments to the option.
+     * That specifier starts with a = (mandatory) or : (optional), then
+     * either i (integer), s (string) or f (floating point).  This can
+     * also be followed by an @ symbol, meaning to store multiple 
+     * values in an array.  Alternately, the specifier can be +, which
+     * means that more than one of this option on the command line increments
+     * the references variable.  Some examples are best supplied here:
+     *
+     * quiet|q          = a single flag, takes no arguments
+     * ouput|o=s        = an option with a mandatory string argument
+     * debug|d:i        = an option with an optional integer argument
+     * input|i=s@       = take multiple instances, store in array
+     * verbose|v+       = more -v options increment the verbosity
+     *
+     * So we might ask for those arguments to be processed from the command
+     * line with the following invocation:
+     *
+     * $args = Console_GetoptLong::getOptions(
+     *      'quiet|q'       => &$quiet,
+     *      'verbose|v+'    => &$verbose,
+     *      'input|i=s@'    => &$inputs,
+     *      'output|o=s'    => &$outupt,
+     *      'debug|d+'      => &$debug,
+     * );
+     *
+     * Argument descriptions can be in any order (naturally).  Each option
+     * can have one or more synonyms, or none.  Both single dash (-) and
+     * double dash (--) are taken to signify options of any length (i.e.
+     * the above description allows you to specify -input and --i as well
+     * as the more usual -i and --input).
+     *
+     * If you do not supply a @ descriptor, but reference an array, the items
+     * will be put into the array automatically (i.e. the argument will be
+     * treated as if described by @).
+     * 
+     * @return array the remaining list of command line parameters that
+     * weren't options or their arguments.  These can occur anywhere in the
+     * command line, so (with the above argument description) it would be
+     * valid to call the related program with the arguments:
+     *
+     * -v -v convert_to_proteins -i viruses.fasta -o viruses.prot
+     *
+     * Which would then return an array with the word 'convert_to_proteins'.
+     *
      */
+     
     function getOptions($argDescriptions)
     {
         $debug = false;
