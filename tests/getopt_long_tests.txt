@@ -1,3 +1,16 @@
+# Argument description parsing
+Missing trailing synonym;setup;foo|;Do not recognise description 'foo|'
+Missing second trailing synonym;setup;foo|bar|;Do not recognise description 'foo|bar|'
+Missing starting synonym;setup;|foo;Do not recognise description '|foo'
+Missing second starting synonym;setup;|foo|bar;Do not recognise description '|foo|bar'
+Missing mandatory type specifier;setup;foo=;Do not recognise description 'foo='
+Missing optional type specifier;setup;foo:;Do not recognise description 'foo:'
+Doubled mandatory type specifier;setup;foo==;Do not recognise description 'foo=='
+Doubled optional type specifier;setup;foo::;Do not recognise description 'foo::'
+Invalid type specifier;setup;foo=q;Do not recognise description 'foo=q'
+Mixed standard and increment specifier;setup;foo=i+;Do not recognise description 'foo=i+'
+Extra suffix on type specifier;setup;foo=ss;Do not recognise description 'foo=ss'
+Extra suffix on increment specifier;setup;foo++;Do not recognise description 'foo++'
 # No arguments
 No arguments;noargs;;()
 Non-option argument;noargs;foo;(foo)

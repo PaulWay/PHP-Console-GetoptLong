@@ -20,7 +20,7 @@ my $testno = 0;
 foreach my $aref (@tests) {
 	$testno++;
 	my ($description, $testprog, $args, $expected) = @$aref;
-	$args =~ s{\|}{\\|};
+	$args =~ s{\|}{\\|}g;
 	#print "php test_$testprog.php $args\n";
     my $actual = qx{php test_$testprog.php $args};
     chomp $actual;
