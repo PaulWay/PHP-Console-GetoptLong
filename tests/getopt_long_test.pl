@@ -9,7 +9,7 @@ my @tests;
 while (<>) {
     chomp;
     next if m{^#};
-    my @args = split(":",$_);
+    my @args = split(";",$_);
     next unless scalar @args == 4;
     push @tests, \@args;
 }
