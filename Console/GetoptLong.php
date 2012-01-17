@@ -43,9 +43,9 @@ class Console_GetoptLong
      * @access private
      */
     private static $_typeLookup = array(
-        's' => 'string',
-        'i' => 'integer',
-        'f' => 'float',
+        's' => 'a string',
+        'i' => 'an integer',
+        'f' => 'a float',
     );
     
     /**
@@ -83,6 +83,7 @@ class Console_GetoptLong
             Console_GetoptLong::_debug("  Checking $arg is a float\n");
             return is_numeric($arg);
         } else {
+            // This is actually handled in the regexp now.
             print("Warning: unknown type check '$type'.\n");
         }
     }
@@ -260,7 +261,7 @@ class Console_GetoptLong
                                     $args[$i], $optInfo['type']
                                 )) {
                                     die(
-                                        "$arg argument requires a "
+                                        "$arg argument requires "
                                         . Console_GetoptLong::$_typeLookup[
                                             $optInfo['type']
                                         ] . "\n"
