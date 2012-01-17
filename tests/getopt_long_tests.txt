@@ -9,12 +9,15 @@ Doubled mandatory type specifier;setup;foo==;Do not recognise description 'foo==
 Doubled optional type specifier;setup;foo::;Do not recognise description 'foo::'
 Invalid type specifier;setup;foo=q;Do not recognise description 'foo=q'
 Mixed standard and increment specifier;setup;foo=i+;Do not recognise description 'foo=i+'
+Mixed standard and negation specifier;setup;foo=i!;Do not recognise description 'foo=i!'
+Mixed increment and negation specifier;setup;foo!+;Do not recognise description 'foo!+'
 Extra suffix on type specifier;setup;foo=ss;Do not recognise description 'foo=ss'
 Extra suffix on increment specifier;setup;foo++;Do not recognise description 'foo++'
 # No arguments
 No arguments;noargs;;()
 Non-option argument;noargs;foo;(foo)
 # Flag argument
+Verbose (no argument);flag;;0,()
 Verbose (short);flag;-v;1,()
 Verbose (long);flag;-verbose;1,()
 Verbose (long double-dash);flag;--verbose;1,()
@@ -31,7 +34,12 @@ Negatable (long double-dash);negatable;--flag;1,()
 Negatable negated (short);negatable;-nof;0,()
 Negatable negated (long);negatable;-noflag;0,()
 Negatable negated (long double-dash);negatable;--noflag;0,()
+Negatable with arg before;negatable;foo -f;1,(foo)
+Negatable with arg after;negatable;-f foo;1,(foo)
+Negatable (negated) with arg before;negatable;foo -nof;0,(foo)
+Negatable (negated) with arg after;negatable;-nof foo;0,(foo)
 # Mandatory arguments (string)
+Mandatory (no argument);mandatory_single;;,()
 Mandatory arg (short);mandatory_single;-m file;file,()
 Mandatory arg (long);mandatory_single;-mandatory file;file,()
 Mandatory arg (long double-dash);mandatory_single;--mandatory file;file,()
@@ -41,12 +49,14 @@ Mandatory arg twice (latter value);mandatory_single;-m file1 -m file2;file2,()
 Mandatory arg error if not supplied;mandatory_single;-m;Argument -m missing its parameter
 Mandatory arg with finish options (mandatory preceding);mandatory_single;-m file -- -i;file,(-i)
 # Mandatory arguments (integer)
+Mandatory arg integer (no argument);mandatory_integer;;,()
 Mandatory arg integer normal;mandatory_integer;-m 1;1,()
 Mandatory arg integer largish;mandatory_integer;-m 16777216;16777216,()
 Mandatory arg integer negative;mandatory_integer;-m -1;-1,()
 Mandatory arg error on string;mandatory_integer;-m foo;-m argument requires an integer
 Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument requires an integer
 # Mandatory arguments into an array - explicit @ declaration in GetOptions
+Mandatory arg array explicit (no argument);mandatory_array_explicit;;,()
 Mandatory arg array explicit (short);mandatory_array_explicit;-m file1 -m file2;(file1,file2),()
 Mandatory arg array explicit (long);mandatory_array_explicit;-mandatory file1 -mandatory file2;(file1,file2),()
 Mandatory arg array explicit (long double-dash);mandatory_array_explicit;--mandatory file1 --mandatory file2;(file1,file2),()
@@ -63,6 +73,7 @@ Mandatory arg array implicit with extra before;mandatory_array_implicit;foo -m f
 Mandatory arg array implicit with extra during;mandatory_array_implicit;-m file1 foo -m file2;(file1,file2),(foo)
 Mandatory arg array implicit with extra after;mandatory_array_implicit;-m file1 -m file2 foo;(file1,file2),(foo)
 # Optional arguments
+Optional arg (no arguments);optional_single;;,()
 Optional arg (missing) (short);optional_single;-o;1,()
 Optional arg (missing) (long);optional_single;-optional;1,()
 Optional arg (missing) (long double-dash);optional_single;--optional;1,()
@@ -78,11 +89,13 @@ Optional arg (present) twice (latter value);optional_single;-o foo -o bar;bar,()
 Optional arg with finish options (optional non-supplied preceding);optional_single;-o -- -i;1,(-i)
 Optional arg with finish options (optional supplied preceding);optional_single;-o opt -- -i;opt,(-i)
 # Optional arguments (integer)
+Optional arg integer (no arguments);optional_integer;;,()
 Optional arg integer normal;optional_integer;-o 1;1,()
 Optional arg integer largish;optional_integer;-o 16777216;16777216,()
 Optional arg error on string;optional_integer;-o foo;-o argument requires an integer
 Optional arg error on float;optional_integer;-o 3.14;-o argument requires an integer
 # Incremented arguments
+Increment (no arguments);increment;;0,()
 Increment (short);increment;-i;1,()
 Increment (long);increment;-increment;1,()
 Increment (long double-dash);increment;--increment;1,()
@@ -91,5 +104,4 @@ Increment with arg after;increment;-i foo;1,(foo)
 Double increment;increment;-i -i;2,()
 Double increment (different names);increment;-i -increment;2,()
 Increment with finish options (increment preceding);increment;-i -- -i;1,(-i)
-# End of options '--' processing.
 
