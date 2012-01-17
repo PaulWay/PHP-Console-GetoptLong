@@ -106,13 +106,17 @@ class Console_GetoptLong
      * also be followed by an @ symbol, meaning to store multiple 
      * values in an array.  Alternately, the specifier can be +, which
      * means that more than one of this option on the command line increments
-     * the references variable.  Some examples are best supplied here:
+     * the references variable, or !, which means that the option is a flag
+     * but also takes a 'no' prefix (e.g. --sort and --nosort).
+     *
+     * Some examples are best supplied here:
      *
      * quiet|q          = a single flag, takes no arguments
      * ouput|o=s        = an option with a mandatory string argument
      * debug|d:i        = an option with an optional integer argument
      * input|i=s@       = take multiple instances, store in array
      * verbose|v+       = more -v options increment the verbosity
+     * invert!          = takes --invert and --noinvert
      *
      * So we might ask for those arguments to be processed from the command
      * line with the following invocation:
@@ -160,16 +164,22 @@ class Console_GetoptLong
             $optInfo = array('var' => &$argDescriptions[$argdesc]);
 
             // Get the synonyms and the optional options
-            preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|\+)?$}', $argdesc, $matches);
+            preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|[+!])?$}', $argdesc, $matches);
             if (empty($matches)) {
                 die("Do not recognise description '$argdesc'\n");
             }
 
             $synonyms = $matches[1];
+            $optstr = '';
             if (count($matches) > 2) {
                 $optstr = $matches[2];
-                if ($optstr === '+') {
-                    $optInfo['opt'] = '+';
+                if (strlen($optstr) == 1) {
+                    // Handles single-character descriptions like + and !
+                    $optInfo['opt'] = $optstr;
+
+                    Console_GetoptLong::_debug(
+                        "Opt info opt = $optInfo[opt]\n"
+                    );
                 } else {
                     // Options of the form
                     // [=:][sif]@? - option type, variable type, destination
@@ -196,7 +206,18 @@ class Console_GetoptLong
                     "Putting synonym $synonym of $synonyms in arg_lookup\n"
                 );
 
+                // TODO: check for existing synonyms
                 $arg_lookup[$synonym] = $optInfo;
+                if ($optstr === '!') {
+                    // Add a 'no' prefix option to the list of synonyms
+                    // for this option.  In its options it will recognise
+                    // that it's been set as a negatable option.
+                    // TODO: check for existing synonyms
+                    $arg_lookup["no$synonym"] = $optInfo;
+                    Console_GetoptLong::_debug(
+                        "Got negatable option, added no$synonyms[0] option\n"
+                    );
+                }
             }
         }//end foreach
 
@@ -217,7 +238,7 @@ class Console_GetoptLong
                 // Process no more arguments and exit while loop now.
                 Console_GetoptLong::_debug(
                     "Received double dash at argument $i: already "
-                    . implode(',',$unprocessedArgs) . ", rest is " 
+                    . implode(',', $unprocessedArgs) . ", rest is " 
                     . implode(',', array_slice($args, $i + 1)) . "\n"
                 );
                 array_splice(
@@ -230,19 +251,19 @@ class Console_GetoptLong
             } else if (substr($arg, 0, 1) === '-') {
                 // Starts with a - : does it start with --?
                 if (substr($arg, 0, 2) == '--') {
-                    $opt = substr($arg, 2);
+                    $option = substr($arg, 2);
                 } else {
-                    $opt = substr($arg, 1);
+                    $option = substr($arg, 1);
                 }
 
-                Console_GetoptLong::_debug(" Looks like option $opt.\n");
+                Console_GetoptLong::_debug(" Looks like option $option.\n");
 
-                if (array_key_exists($opt, $arg_lookup) === true) {
+                if (array_key_exists($option, $arg_lookup) === true) {
                     Console_GetoptLong::_debug(
                         "  And it's an option we recognise\n"
                     );
 
-                    $optInfo = $arg_lookup[$opt];
+                    $optInfo = $arg_lookup[$option];
                     $var = &$optInfo['var'];
 
                     // Does it have any arguments?
@@ -344,7 +365,7 @@ class Console_GetoptLong
                                         $args[$i], $optInfo['type']
                                     )) {
                                         die(
-                                            "$arg argument requires a "
+                                            "$arg argument requires "
                                             . Console_GetoptLong::$_typeLookup[
                                                 $optInfo['type']
                                             ] . "\n"
@@ -360,12 +381,19 @@ class Console_GetoptLong
                                 "  it's an incrementing argument, setting its"
                                 . " variable to $optInfo[var]\n"
                             );
+                        } else if ($opt === '!') {
+                            // a negatable argument - check if we've been
+                            // given the no variant and set accordingly.
+                            $var = (substr($option, 0, 2) === 'no') ? 0 : 1;
+                            
+                            Console_GetoptLong::_debug(
+                                "  it's negatable: set to $var because of $option\n"
+                            );
                         }
                     } else {
                         // No args, just a boolean, set it:
                         Console_GetoptLong::_debug(
-                            "  it's a boolean: setting its variable from "
-                            . "$var to 1\n"
+                            "  it's a boolean: setting its variable to 1\n"
                         );
 
                         $var = 1;

@@ -36,8 +36,8 @@ Mandatory arg with finish options (mandatory preceding);mandatory_single;-m file
 Mandatory arg integer normal;mandatory_integer;-m 1;1,()
 Mandatory arg integer largish;mandatory_integer;-m 16777216;16777216,()
 Mandatory arg integer negative;mandatory_integer;-m -1;-1,()
-Mandatory arg error on string;mandatory_integer;-m foo;-m argument requires a integer
-Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument requires a integer
+Mandatory arg error on string;mandatory_integer;-m foo;-m argument requires an integer
+Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument requires an integer
 # Mandatory arguments into an array - explicit @ declaration in GetOptions
 Mandatory arg array explicit (short);mandatory_array_explicit;-m file1 -m file2;(file1,file2),()
 Mandatory arg array explicit (long);mandatory_array_explicit;-mandatory file1 -mandatory file2;(file1,file2),()
@@ -72,8 +72,8 @@ Optional arg with finish options (optional supplied preceding);optional_single;-
 # Optional arguments (integer)
 Optional arg integer normal;optional_integer;-o 1;1,()
 Optional arg integer largish;optional_integer;-o 16777216;16777216,()
-Optional arg error on string;optional_integer;-o foo;-o argument requires a integer
-Optional arg error on float;optional_integer;-o 3.14;-o argument requires a integer
+Optional arg error on string;optional_integer;-o foo;-o argument requires an integer
+Optional arg error on float;optional_integer;-o 3.14;-o argument requires an integer
 # Incremented arguments
 Increment (short);increment;-i;1,()
 Increment (long);increment;-increment;1,()
