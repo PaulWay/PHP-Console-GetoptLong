@@ -160,7 +160,7 @@ class Console_GetoptLong
 
             // Get the synonyms and the optional options
             preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|\+)?$}', $argdesc, $matches);
-            if (empty($matches) === true) {
+            if (empty($matches)) {
                 die("Do not recognise description '$argdesc'\n");
             }
 
@@ -185,6 +185,7 @@ class Console_GetoptLong
             }
 
             foreach (explode('|', $synonyms) as $synonym) {
+                // This is actually handled by the regexp now.
                 if (strlen($synonym) < 1) {
                     print("Warning: key $synonyms started or ended with |.\n");
                     continue;
@@ -213,6 +214,11 @@ class Console_GetoptLong
 
             if ($arg === '--') {
                 // Process no more arguments and exit while loop now.
+                Console_GetoptLong::_debug(
+                    "Received double dash at argument $i: already "
+                    . implode(',',$unprocessedArgs) . ", rest is " 
+                    . implode(',', array_slice($args, $i + 1)) . "\n"
+                );
                 array_splice(
                     $unprocessedArgs,
                     count($unprocessedArgs),
