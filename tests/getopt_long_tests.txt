@@ -69,6 +69,11 @@ Optional arg (present) with arg after;optional_single;-o 3 foo;3,(foo)
 Optional arg (present) twice (latter value);optional_single;-o foo -o bar;bar,()
 Optional arg with finish options (optional non-supplied preceding);optional_single;-o -- -i;1,(-i)
 Optional arg with finish options (optional supplied preceding);optional_single;-o opt -- -i;opt,(-i)
+# Optional arguments (integer)
+Optional arg integer normal;optional_integer;-o 1;1,()
+Optional arg integer largish;optional_integer;-o 16777216;16777216,()
+Optional arg error on string;optional_integer;-o foo;-o argument requires a integer
+Optional arg error on float;optional_integer;-o 3.14;-o argument requires a integer
 # Incremented arguments
 Increment (short);increment;-i;1,()
 Increment (long);increment;-increment;1,()
