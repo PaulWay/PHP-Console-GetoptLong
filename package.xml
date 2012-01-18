@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-01-14</date>
- <time>00:42:00</time>
+ <date>2012-01-18</date>
+ <time>16:42:00</time>
  <version>
-  <release>1.4.0</release>
+  <release>1.5.0</release>
   <api>1.0</api>
  </version>
  <stability>
@@ -25,7 +25,7 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>We now actually check the arguments are the type required.</notes>
+ <notes>Negatable flags, some code improvements, and more tests.</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -54,6 +54,23 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.5.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-18</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Several improvements:
+* negatable flags (e.g. --flag and --noflag)
+* better variable name ($opt doesn't have two meanings in main loop)
+* testing of argument description parse failures
+</notes>
+  </release>
   <release>
    <version>
     <release>1.4.0</release>

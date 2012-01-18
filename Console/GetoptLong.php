@@ -22,7 +22,7 @@
  * @author    Paul Wayper <paulway@mabula.net>
  * @copyright 2012 Paul Wayper
  * @license   http://www.php.net/license/3_01.txt PHP 3.01
- * @version   Release: 1.4.0
+ * @version   Release: 1.5.0
  * @link      <pear package page URL>
  */
 class Console_GetoptLong
