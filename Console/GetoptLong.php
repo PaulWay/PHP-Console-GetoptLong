@@ -100,10 +100,10 @@ class Console_GetoptLong
     
     private function _showHelp($argHelp)
     {
-        echo "Usage: $0 options...\n";
+        echo "Usage: $_SERVER[PHP_SELF] options...\n";
         ksort($argHelp);
         foreach ($argHelp as $synonyms => $help) {
-            echo "  $synonyms : $help\n";
+            echo "  $synonyms : $help[help]\n";
         }
     }
     
