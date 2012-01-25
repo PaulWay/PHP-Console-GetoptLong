@@ -44,6 +44,7 @@
    <file baseinstalldir="/tests" name="tests/test_optional_integer.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_increment.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_negatable.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_help.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
