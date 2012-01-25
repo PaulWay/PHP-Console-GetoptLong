@@ -17,7 +17,7 @@
  <date>2012-01-25</date>
  <time>17:15:00</time>
  <version>
-  <release>1.6.0</release>
+  <release>1.6.1</release>
   <api>1.0</api>
  </version>
  <stability>
@@ -25,8 +25,7 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>We can now pass in arrays with 'help' and 'var' keys, and automatically
-  generate a usage output.
+ <notes>Added the other test files to the package.
  </notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
@@ -35,11 +34,17 @@
    </file>
    <file baseinstalldir="/tests" name="tests/getopt_long_test.pl" role="test" />
    <file baseinstalldir="/tests" name="tests/getopt_long_tests.txt" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_setup.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_noargs.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_flag.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_mandatory_single.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_integer.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_array_explicit.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_array_implicit.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_optional_single.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_optional_integer.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_increment.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_negatable.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
@@ -56,6 +61,20 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.6.1</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-25</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Added the other test files to the package.
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.6.0</release>
