@@ -6,9 +6,14 @@ require_once "../Console/GetoptLong.php";
 // generates on bad option description configuration.
 
 $variable = '';
-$args = Console_GetoptLong::getOptions(array(
+$othervar = '';
+$optDesc = array(
 	$_SERVER['argv'][1]	=> &$variable,
-));
+);
+if (count($_SERVER['argv']) > 2) {
+    $optDesc[$_SERVER['argv'][2]] = &$othervar;
+}
+$args = Console_GetoptLong::getOptions($optDesc);
 
 print "OK\n";
 

@@ -15,18 +15,17 @@
   <active>yes</active>
  </lead>
  <date>2012-01-25</date>
- <time>17:15:00</time>
+ <time>23:16:00</time>
  <version>
-  <release>1.6.1</release>
-  <api>1.0</api>
+  <release>1.6.2</release>
+  <api>1.1</api>
  </version>
  <stability>
   <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Added the other test files to the package.
- </notes>
+ <notes>We now check and warn for duplicate synonyms</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -61,6 +60,19 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.6.2</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-25</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now check and warn for duplicate synonyms.</notes>
+  </release>
   <release>
    <version>
     <release>1.6.1</release>

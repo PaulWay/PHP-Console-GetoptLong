@@ -269,14 +269,25 @@ class Console_GetoptLong
                     "Putting synonym $synonym of $synonyms in arg_lookup\n"
                 );
 
-                // TODO: check for existing synonyms
-                $arg_lookup[$synonym] = $optInfo;
+                // check for existing synonyms
+                if (array_key_exists($synonym, $arg_lookup)) {
+                    print("Warning: synonym $synonym declared twice - ignoring.\n");
+                } else {
+                    $arg_lookup[$synonym] = $optInfo;
+                }
                 if ($optstr === '!') {
                     // Add a 'no' prefix option to the list of synonyms
                     // for this option.  In its options it will recognise
                     // that it's been set as a negatable option.
-                    // TODO: check for existing synonyms
-                    $arg_lookup["no$synonym"] = $optInfo;
+                    // check for existing synonyms
+                    if (array_key_exists("no$synonym", $arg_lookup)) {
+                        print(
+                            "Warning: synonym no$synonym declared twice - "
+                            . "ignoring.\n"
+                        );
+                    } else {
+                        $arg_lookup["no$synonym"] = $optInfo;
+                    }
                     Console_GetoptLong::_debug(
                         "Got negatable option, added no$synonyms[0] option\n"
                     );

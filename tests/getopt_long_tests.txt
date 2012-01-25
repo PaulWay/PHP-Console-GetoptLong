@@ -13,6 +13,13 @@ Mixed standard and negation specifier;setup;foo=i!;Do not recognise description 
 Mixed increment and negation specifier;setup;foo!+;Do not recognise description 'foo!+'
 Extra suffix on type specifier;setup;foo=ss;Do not recognise description 'foo=ss'
 Extra suffix on increment specifier;setup;foo++;Do not recognise description 'foo++'
+Equal descriptions are smashed together in array;setup;foo foo;OK
+Warning about duplicate synonyms - A in B first;setup;foo|foobar foo;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - A in B last;setup;foobar|foo foo;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - B in A first;setup;foo foo|foobar;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - B in A last;setup;foo foobar|foo;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - short;setup;foo|f file|f;Warning: synonym f declared twice - ignoring.\nOK
+Warning about duplicate synonyms - one negated, the other not;setup;notice tice!;Warning: synonym notice declared twice - ignoring.\nOK
 # No arguments
 No arguments;noargs;;()
 Non-option argument;noargs;foo;(foo)
