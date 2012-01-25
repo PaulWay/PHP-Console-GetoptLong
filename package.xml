@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-01-18</date>
- <time>16:42:00</time>
+ <date>2012-01-25</date>
+ <time>17:15:00</time>
  <version>
-  <release>1.5.0</release>
+  <release>1.6.0</release>
   <api>1.0</api>
  </version>
  <stability>
@@ -25,7 +25,9 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Negatable flags, some code improvements, and more tests.</notes>
+ <notes>We can now pass in arrays with 'help' and 'var' keys, and automatically
+  generate a usage output.
+ </notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -54,6 +56,21 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.6.0</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-25</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We can now pass in arrays with 'help' and 'var' keys, and automatically
+  generate a usage output.
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.5.0</release>

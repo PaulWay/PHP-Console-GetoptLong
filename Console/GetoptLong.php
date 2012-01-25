@@ -22,7 +22,7 @@
  * @author    Paul Wayper <paulway@mabula.net>
  * @copyright 2012 Paul Wayper
  * @license   http://www.php.net/license/3_01.txt PHP 3.01
- * @version   Release: 1.5.0
+ * @version   Release: 1.6.0
  * @link      <pear package page URL>
  */
 class Console_GetoptLong
@@ -87,6 +87,26 @@ class Console_GetoptLong
             print("Warning: unknown type check '$type'.\n");
         }
     }
+    
+    /**
+     * _showHelp - show the user the help descriptions supplied.
+     *
+     * This function takes the descriptions of each argument and its supplied
+     * 
+     * @param array $argHelp Describing the arguments and their help text.
+     *
+     * @return none
+     */
+    
+    private function _showHelp($argHelp)
+    {
+        echo "Usage: $0 options...\n";
+        ksort($argHelp);
+        foreach ($argHelp as $synonyms => $help) {
+            echo "  $synonyms : $help\n";
+        }
+    }
+    
     /**
      * getOptions - set referenced variables from argument descriptions.
      *
@@ -138,6 +158,19 @@ class Console_GetoptLong
      * If you do not supply a @ descriptor, but reference an array, the items
      * will be put into the array automatically (i.e. the argument will be
      * treated as if described by @).
+     *
+     * Showing help: if you supply a keyed array instead of a variable
+     * reference, and it contains the keys 'var' and 'help', then the 'var'
+     * element will be taken as the variable reference and the 'help' element
+     * will be taken as the help text to display for this option.
+     * If any argument description value has this form, and the 'help' or 'h' 
+     * options have not already been supplied, getOptions will automatically
+     * add the 'help' and 'h' options to the list of options recognised and,
+     * if supplied on the command line, will print a simple derived usage
+     * explanation and exit cleanly.  Any option that you don't supply a 'help'
+     * keyword for in this fashion will not be printed in the help display.
+     * If you supply your own description that includes 'help' or 'h' as
+     * synonyms, you're on your own and automated help will not come forth. 
      * 
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
@@ -156,12 +189,34 @@ class Console_GetoptLong
         // Preprocess argument descriptions to look up names and info
         $arg_lookup = array();
 
+        $help_supplied = false; // Are we to generate help options?
+        $argHelp = array();
+        
         // foreach key => val doesn't respect references - use keys only
         foreach (array_keys($argDescriptions) as $argdesc) {
             // Pull apart the arguments into a list of synonyms and then the
             // (optional) option information.
-            // Make sure we reference the reference
-            $optInfo = array('var' => &$argDescriptions[$argdesc]);
+            
+            // If we've been given an array and it contains elements keyed
+            // 'var' and 'help', then we're going to assume it's a help 
+            // description and enable the help system (if the user hasn't
+            // set one up).
+            $this_has_help = false;
+            if (is_array($argDescriptions[$argdesc])
+                && array_key_exists('var', $argDescriptions[$argdesc])
+                && array_key_exists('help', $argDescriptions[$argdesc])
+            ) {
+                $help_supplied = true;
+                $this_has_help = true;
+                // Make sure we reference the reference
+                $optInfo = array(
+                    'var'    => &$argDescriptions[$argdesc]['var'],
+                );
+            } else {
+                // Take whatever reference we've got and store it.
+                // Make sure we reference the reference
+                $optInfo = array('var' => &$argDescriptions[$argdesc]);
+            }
 
             // Get the synonyms and the optional options
             preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|[+!])?$}', $argdesc, $matches);
@@ -194,6 +249,14 @@ class Console_GetoptLong
                     );
                 }
             }
+            // Now that we've got the synonyms and the option string, save all
+            // that by the full list of synonyms for the help system if needed.
+            if ($this_has_help) {
+                $argHelp[$synonyms] = array(
+                    'help'    => &$argDescriptions[$argdesc]['help'],
+                    // other stuff here?
+                );
+            }
 
             foreach (explode('|', $synonyms) as $synonym) {
                 // This is actually handled by the regexp now.
@@ -220,6 +283,18 @@ class Console_GetoptLong
                 }
             }
         }//end foreach
+        
+        // If we've got help descriptions supplied, add the help arguments
+        // as lookup with our special magic value.
+        if ($help_supplied
+            && ! array_key_exists('help', $arg_lookup)
+            && ! array_key_exists('h', $arg_lookup)
+        ) {
+            // Help supplied and the caller hasn't specified their own
+            // option for it - let's handle that ourselves.
+            $arg_lookup['help'] = 'help'; // magic keyword
+            $arg_lookup['h']    = 'help';
+        }
 
         // Now go through the arguments.
         $unprocessedArgs = array();
@@ -264,6 +339,12 @@ class Console_GetoptLong
                     );
 
                     $optInfo = $arg_lookup[$option];
+                    if ($optInfo === 'help') {
+                        // magic keyword
+                        Console_GetoptLong::_showHelp($argHelp);
+                        exit(0);
+                    }
+                    // otherwise it's a normal reference
                     $var = &$optInfo['var'];
 
                     // Does it have any arguments?
