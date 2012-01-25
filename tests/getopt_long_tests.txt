@@ -104,4 +104,31 @@ Increment with arg after;increment;-i foo;1,(foo)
 Double increment;increment;-i -i;2,()
 Double increment (different names);increment;-i -increment;2,()
 Increment with finish options (increment preceding);increment;-i -- -i;1,(-i)
+# Help configuration
+Help text set, no options;help;;0,,,0,0,()
+Help text set, flag;help;--flag;1,,,0,0,()
+Help text set, mandatory;help;--mandatory 42;0,42,,0,0,()
+Help text set, optional (missing);help;--optional;0,,1,0,0,()
+Help text set, optional (present);help;--optional;0,,1,0,0,()
+Help text set, increment;help;--increment;0,,,1,0,()
+Help text set, negatable;help;--negatable;0,,,0,1,()
+Help text set, help option (short) alone;help;-h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option (long single) alone;help;-help;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option (long double) alone;help;--help;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+# help should always be printed even if other things are on the command line
+Help text set, help option with flag after;help;-h --flag;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with flag before;help;--flag -h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with mandatory after;help;-h --mandatory 3;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with mandatory before;help;--mandatory 3 -h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (missing) after;help;-h -optional;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (missing) before;help;--optional -h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (present) after;help;-h -o 3;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (present) before;help;--optional 3 -h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with increment after;help;-h -i;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with increment before;help;--increment -h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with negatable after;help;-h --negatable;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with negatable before;help;-n -h;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+# but help should only be recognised before a stop-options double dash
+Help text set, help option with stop options before;help;-- -h;0,,,0,0,(-h)
+Help text set, help option with stop options after;help;-h --;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
 
