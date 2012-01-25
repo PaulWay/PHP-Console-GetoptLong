@@ -20,7 +20,7 @@ my $testno = 0;
 foreach my $aref (@tests) {
 	$testno++;
 	my ($description, $testprog, $args, $expected) = @$aref;
-	$args =~ s{\|}{\\|}g; # escape pipes in args for test_setup
+	$args =~ s{([|!])}{\\$1}g; # escape pipes in args for test_setup
 	$expected =~ s{\\n}{\n}g; # turn \n into newlines for test_help
 	#print "php test_$testprog.php $args\n";
     my $actual = qx{php test_$testprog.php $args};
