@@ -22,7 +22,7 @@
  * @author    Paul Wayper <paulway@mabula.net>
  * @copyright 2012 Paul Wayper
  * @license   http://www.php.net/license/3_01.txt PHP 3.01
- * @version   Release: 1.6.3
+ * @version   Release: 1.6.4
  * @link      <pear package page URL>
  */
 class Console_GetoptLong
@@ -297,15 +297,20 @@ class Console_GetoptLong
         
         // If we've got help descriptions supplied, add the help arguments
         // as lookup with our special magic value.
-        if ($help_supplied
-            && ! array_key_exists('help', $arg_lookup)
-            && ! array_key_exists('h', $arg_lookup)
-        ) {
-            // TODO: warn if help supplied in parameters and also as an option
-            // Help supplied and the caller hasn't specified their own
-            // option for it - let's handle that ourselves.
-            $arg_lookup['help'] = 'help'; // magic keyword
-            $arg_lookup['h']    = 'help';
+        if ($help_supplied) {
+            if (array_key_exists('help', $arg_lookup)) {
+                echo "Warning: option 'help' already supplied, ignoring help "
+                    . "supplied in targets\n";
+            } else if (array_key_exists('h', $arg_lookup) ) {
+                echo "Warning: option 'h' already supplied, ignoring help "
+                    . "supplied in targets\n";
+            } else {
+                // TODO: warn if help supplied in parameters and also as an option
+                // Help supplied and the caller hasn't specified their own
+                // option for it - let's handle that ourselves.
+                $arg_lookup['help'] = 'help'; // magic keyword
+                $arg_lookup['h']    = 'help';
+            }
         }
 
         // Now go through the arguments.

@@ -15,9 +15,9 @@
   <active>yes</active>
  </lead>
  <date>2012-02-01</date>
- <time>16:10:00</time>
+ <time>16:28:00</time>
  <version>
-  <release>1.6.3</release>
+  <release>1.6.4</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,7 +25,8 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Do not generate help if the caller has specified their own help option.</notes>
+ <notes>Warn if help is supplied in the target of an option, and either 'h' or 'help'
+ are supplied as synonyms (i.e. we can do one, or the other, but not both).</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -61,6 +62,20 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.6.4</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-01</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Warn if help is supplied in the target of an option, and either 'h' or 'help'
+ are supplied as synonyms (i.e. we can do one, or the other, but not both).</notes>
+  </release>
   <release>
    <version>
     <release>1.6.3</release>
