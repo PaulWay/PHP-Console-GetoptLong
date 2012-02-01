@@ -22,7 +22,7 @@
  * @author    Paul Wayper <paulway@mabula.net>
  * @copyright 2012 Paul Wayper
  * @license   http://www.php.net/license/3_01.txt PHP 3.01
- * @version   Release: 1.6.0
+ * @version   Release: 1.6.3
  * @link      <pear package page URL>
  */
 class Console_GetoptLong
@@ -301,6 +301,7 @@ class Console_GetoptLong
             && ! array_key_exists('help', $arg_lookup)
             && ! array_key_exists('h', $arg_lookup)
         ) {
+            // TODO: warn if help supplied in parameters and also as an option
             // Help supplied and the caller hasn't specified their own
             // option for it - let's handle that ourselves.
             $arg_lookup['help'] = 'help'; // magic keyword
@@ -492,6 +493,7 @@ class Console_GetoptLong
                     }
                 } else {
                     // Not a recognised argument argument: leave it unprocessed.
+                    // TODO: maybe we should warn about an unrecognised option?
                     $unprocessedArgs[] = $arg;
                 }
             } else {

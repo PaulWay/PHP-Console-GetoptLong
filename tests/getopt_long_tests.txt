@@ -138,4 +138,8 @@ Help text set, help option with negatable before;help;-n -h;Usage: test_help.php
 # but help should only be recognised before a stop-options double dash
 Help text set, help option with stop options before;help;-- -h;0,,,0,0,(-h)
 Help text set, help option with stop options after;help;-h --;Usage: test_help.php options...\n  flag : Flag option\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+# And help shouldn't be supplied if we ask to deal with the help option ourselves.
+Help text set, help option manually set, no options, should not generate help;help_own;;OK(help=0)
+Help text set, help option manually set, other option given, should not generate help;help_own;-foo;OK(help=0)
+Help text set, help option manually set, help option given, should not generate help;help_own;-help;OK(help=1)
 
