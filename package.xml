@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-02-01</date>
- <time>16:28:00</time>
+ <date>2012-02-29</date>
+ <time>10:41:00</time>
  <version>
-  <release>1.6.4</release>
+  <release>1.6.5</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,8 +25,7 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Warn if help is supplied in the target of an option, and either 'h' or 'help'
- are supplied as synonyms (i.e. we can do one, or the other, but not both).</notes>
+ <notes>Missed test file out of package.</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -46,6 +45,7 @@
    <file baseinstalldir="/tests" name="tests/test_increment.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_negatable.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_help.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_help_own.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
@@ -62,6 +62,19 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.6.5</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-29</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Missed test file out of package.</notes>
+  </release>  
   <release>
    <version>
     <release>1.6.4</release>
