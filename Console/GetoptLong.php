@@ -219,7 +219,7 @@ class Console_GetoptLong
             }
 
             // Get the synonyms and the optional options
-            preg_match('{^(\w+(?:\|\w+)*)([=:][sif]@?|[+!])?$}', $argdesc, $matches);
+            preg_match('{^([\w-]+(?:\|[\w-]+)*)([=:][sif]@?|[+!])?$}', $argdesc, $matches);
             if (empty($matches)) {
                 die("Do not recognise description '$argdesc'\n");
             }

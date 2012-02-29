@@ -20,6 +20,7 @@ Warning about duplicate synonyms - B in A first;setup;foo foo|foobar;Warning: sy
 Warning about duplicate synonyms - B in A last;setup;foo foobar|foo;Warning: synonym foo declared twice - ignoring.\nOK
 Warning about duplicate synonyms - short;setup;foo|f file|f;Warning: synonym f declared twice - ignoring.\nOK
 Warning about duplicate synonyms - one negated, the other not;setup;notice tice!;Warning: synonym notice declared twice - ignoring.\nOK
+Options with dashes in them are OK;setup;foo-bar-baz;OK
 # No arguments
 No arguments;noargs;;()
 Non-option argument;noargs;foo;(foo)
