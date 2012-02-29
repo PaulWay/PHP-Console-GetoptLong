@@ -15,9 +15,9 @@
   <active>yes</active>
  </lead>
  <date>2012-02-29</date>
- <time>10:41:00</time>
+ <time>11:13:00</time>
  <version>
-  <release>1.6.5</release>
+  <release>1.7.0</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,7 +25,8 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Missed test file out of package.</notes>
+ <notes>Added the generation of tests that check that the files used in these
+ tests are also mentioned in the package.xml file.</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -62,6 +63,20 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.7.0</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-29</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Added the generation of tests that check that the files used in these
+   tests are also mentioned in the package.xml file.</notes>
+  </release>  
   <release>
    <version>
     <release>1.6.5</release>
