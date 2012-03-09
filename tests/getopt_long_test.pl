@@ -38,8 +38,8 @@ while (<$fh>) {
      if m{<file baseinstalldir="/tests" name="tests/test_(\w+).php" role="test" />};
 }
 close $fh;
-print 'required: (',join(',',sort keys %testprog_required),'), in package: ('
-    , join(',',sort keys %testprog_in_package),")\n";
+#print 'required: (',join(',',sort keys %testprog_required),'), in package: ('
+#    , join(',',sort keys %testprog_in_package),")\n";
 
 # Test anywhere protocol:
 print "1..",scalar @tests, "\n";
