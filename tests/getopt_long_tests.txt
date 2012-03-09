@@ -56,13 +56,24 @@ Mandatory arg with arg after;mandatory_single;-m file foo;file,(foo)
 Mandatory arg twice (latter value);mandatory_single;-m file1 -m file2;file2,()
 Mandatory arg error if not supplied;mandatory_single;-m;Argument -m missing its parameter
 Mandatory arg with finish options (mandatory preceding);mandatory_single;-m file -- -i;file,(-i)
+Mandatory arg from equals (short);mandatory_single;-m=file;file,()
+Mandatory arg from equals (long);mandatory_single;-mandatory=file;file,()
+Mandatory arg from equals (long double-dash);mandatory_single;--mandatory=file;file,()
+Mandatory arg from equals - zero-length string;mandatory_single;-m=;,()
 # Mandatory arguments (integer)
 Mandatory arg integer (no argument);mandatory_integer;;,()
 Mandatory arg integer normal;mandatory_integer;-m 1;1,()
 Mandatory arg integer largish;mandatory_integer;-m 16777216;16777216,()
+Mandatory arg integer huge;mandatory_integer;-m 123456789012345678901234567890;123456789012345678901234567890,()
 Mandatory arg integer negative;mandatory_integer;-m -1;-1,()
 Mandatory arg error on string;mandatory_integer;-m foo;-m argument requires an integer
 Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument requires an integer
+Mandatory arg integer from equals (short);mandatory_integer;-m=27;27,()
+Mandatory arg integer from equals (long);mandatory_integer;-mandatory=27;27,()
+Mandatory arg integer from equals (long double-dash);mandatory_integer;-mandatory=27;27,()
+Mandatory arg integer from equals negative;mandatory_integer;-m=-43;-43,()
+Mandatory arg integer from equals error on string;mandatory_integer;-m=foo;-m argument requires an integer
+Mandatory arg integer from equals error on float;mandatory_integer;-m=-2.71828;-m argument requires an integer
 # Mandatory arguments into an array - explicit @ declaration in GetOptions
 Mandatory arg array explicit (no argument);mandatory_array_explicit;;,()
 Mandatory arg array explicit (short);mandatory_array_explicit;-m file1 -m file2;(file1,file2),()
@@ -72,6 +83,8 @@ Mandatory arg array explicit (mixed);mandatory_array_explicit;-m file1 -mandator
 Mandatory arg array explicit with extra before;mandatory_array_explicit;foo -m file1 -m file2;(file1,file2),(foo)
 Mandatory arg array explicit with extra during;mandatory_array_explicit;-m file1 foo -m file2;(file1,file2),(foo)
 Mandatory arg array explicit with extra after;mandatory_array_explicit;-m file1 -m file2 foo;(file1,file2),(foo)
+Mandatory arg array explicit from equals;mandatory_array_explicit;-m=file1 -m=file2;(file1,file2),()
+Mandatory arg array explicit from equals mixed;mandatory_array_explicit;-m=file1 -mandatory file2;(file1,file2),()
 # Mandatory arguments into an array - implicit via passing an array reference
 Mandatory arg array implicit (short);mandatory_array_implicit;-m file1 -m file2;(file1,file2),()
 Mandatory arg array implicit (long);mandatory_array_implicit;-mandatory file1 -mandatory file2;(file1,file2),()
@@ -80,6 +93,8 @@ Mandatory arg array implicit (mixed);mandatory_array_implicit;-m file1 -mandator
 Mandatory arg array implicit with extra before;mandatory_array_implicit;foo -m file1 -m file2;(file1,file2),(foo)
 Mandatory arg array implicit with extra during;mandatory_array_implicit;-m file1 foo -m file2;(file1,file2),(foo)
 Mandatory arg array implicit with extra after;mandatory_array_implicit;-m file1 -m file2 foo;(file1,file2),(foo)
+Mandatory arg array implicit from equals;mandatory_array_explicit;-m=file1 -m=file2;(file1,file2),()
+Mandatory arg array implicit from equals mixed;mandatory_array_explicit;-m=file1 --mandatory file2;(file1,file2),()
 # Optional arguments
 Optional arg (no arguments);optional_single;;,()
 Optional arg (missing) (short);optional_single;-o;1,()
@@ -102,6 +117,33 @@ Optional arg integer normal;optional_integer;-o 1;1,()
 Optional arg integer largish;optional_integer;-o 16777216;16777216,()
 Optional arg error on string;optional_integer;-o foo;-o argument requires an integer
 Optional arg error on float;optional_integer;-o 3.14;-o argument requires an integer
+# Optional arguments into an array - explicit @ declaration in GetOptions
+Optional arg array explicit (no argument);optional_array_explicit;;,()
+Optional arg array explicit (short);optional_array_explicit;-o file1 -o file2;(file1,file2),()
+Optional arg array explicit (long);optional_array_explicit;-optional file1 -optional file2;(file1,file2),()
+Optional arg array explicit (long double-dash);optional_array_explicit;--optional file1 --optional file2;(file1,file2),()
+Optional arg array explicit (mixed);optional_array_explicit;-o file1 -optional file2 --optional file3;(file1,file2,file3),()
+Optional arg array explicit with extra before;optional_array_explicit;foo -o file1 -o file2;(file1,file2),(foo)
+Optional arg array explicit with extra during;optional_array_explicit;-o file1 foo -o file2;(file1,file2),(foo)
+Optional arg array explicit with extra after;optional_array_explicit;-o file1 -o file2 foo;(file1,file2),(foo)
+Optional arg array explicit from equals;optional_array_explicit;-o=file1 -o=file2;(file1,file2),()
+Optional arg array explicit from equals mixed;optional_array_explicit;-o=file1 --optional file2;(file1,file2),()
+Optional arg array explicit with no arguments;optional_array_explicit;-o -o;(1,1),()
+Optional arg array explicit with some arguments (missing first);optional_array_explicit;-o -o 2;(1,2),()
+Optional arg array explicit with some arguments (missing last);optional_array_explicit;-o 2 -o;(2,1),()
+# Optional arguments into an array - implicit via passing an array reference
+Optional arg array implicit (short);optional_array_implicit;-o file1 -o file2;(file1,file2),()
+Optional arg array implicit (long);optional_array_implicit;-optional file1 -optional file2;(file1,file2),()
+Optional arg array implicit (long double-dash);optional_array_implicit;--optional file1 --optional file2;(file1,file2),()
+Optional arg array implicit (mixed);optional_array_implicit;-o file1 -optional file2 --optional file3;(file1,file2,file3),()
+Optional arg array implicit with extra before;optional_array_implicit;foo -o file1 -o file2;(file1,file2),(foo)
+Optional arg array implicit with extra during;optional_array_implicit;-o file1 foo -o file2;(file1,file2),(foo)
+Optional arg array implicit with extra after;optional_array_implicit;-o file1 -o file2 foo;(file1,file2),(foo)
+Optional arg array implicit from equals;optional_array_explicit;-o=file1 -o=file2;(file1,file2),()
+Optional arg array implicit from equals mixed;optional_array_explicit;-o=file1 -optional file2;(file1,file2),()
+Optional arg array implicit with no arguments;optional_array_explicit;-o -o;(1,1),()
+Optional arg array implicit with some arguments (missing first);optional_array_explicit;-o -o 2;(1,2),()
+Optional arg array implicit with some arguments (missing last);optional_array_explicit;-o 2 -o;(2,1),()
 # Incremented arguments
 Increment (no arguments);increment;;0,()
 Increment (short);increment;-i;1,()

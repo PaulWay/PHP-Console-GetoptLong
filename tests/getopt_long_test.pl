@@ -18,11 +18,18 @@ while (<>) {
 my %testprog_required;
 foreach my $aref (@tests) {
     my $testprog = $$aref[1];
-    next if $testprog eq 'package.xml';
+    next if $testprog eq 'package.xml' or $testprog eq 'subversion';
     unless (exists $testprog_required{$testprog}) {
         push @tests, [
-            "file test_$$aref[1] must be in package.xml",
+            "file test_$testprog must be in package.xml",
             'package.xml',
+            $testprog,
+            'yes',
+        ];
+        # This file-in-subversion test could be expanded for other files...
+        push @tests, [
+            "file test_$testprog.php must be in Subversion",
+            'subversion',
             $testprog,
             'yes',
         ];
@@ -51,7 +58,11 @@ foreach my $aref (@tests) {
 	$args =~ s{([|!])}{\\$1}g; # escape pipes in args for test_setup
 	#print "php test_$testprog.php $args\n";
 	if ($testprog eq 'package.xml') {
-	    $actual   = $testprog_in_package{$args} || 'no';
+	    $actual = $testprog_in_package{$args} || 'no';
+    } elsif ($testprog eq 'subversion') {
+        my $fname = "test_$args.php";
+        my $svninfo = qx{svn info $fname 2>/dev/null};
+        $actual = ($svninfo =~ m{Name: $fname}) ? 'yes' : 'no';
 	} else {
     	$expected =~ s{\\n}{\n}g; # turn \n into newlines for test_help
         $actual   = qx{php test_$testprog.php $args};

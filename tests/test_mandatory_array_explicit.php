@@ -4,7 +4,7 @@ require_once "../Console/GetoptLong.php";
 
 $mandatory = '';
 $args = Console_GetoptLong::getOptions(array(
-	'mandatory|m=s@'		=> &$mandatory,
+	'mandatory|m=s@'    => &$mandatory,
 ));
 
 // If $mandatory is still '', implode won't work; show this separately

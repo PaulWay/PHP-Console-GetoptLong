@@ -108,6 +108,81 @@ class Console_GetoptLong
     }
     
     /**
+     * _setVariable - set the variable from the option's argument.
+     *
+     * Takes the pre-processed knowledge of this option, the option as
+     * supplied on the command line, and the argument (whether from an
+     * option=argument or from the rest of the command line).
+     *
+     * It checks the argument's type, if required, and dies if it's not
+     * the correct type.
+     *
+     * It then puts the argument into the variable, handling cases where
+     * we need to work with arrays. 
+     * 
+     * @param array  $optInfo  the option's pre-processed information.
+     * @param string $option   the option as supplied on the command line.
+     * @param string $argument the argument from the command line (somehow).
+     *
+     * @return none
+     */
+    private function _setVariable($optInfo, $option, $argument)
+    {
+        $var = &$optInfo['var'];
+        if (! Console_GetoptLong::_checkType(
+            $argument, $optInfo['type']
+        )) {
+            die(
+                "$option argument requires "
+                . Console_GetoptLong::$_typeLookup[
+                    $optInfo['type']
+                ] . "\n"
+            );
+        }
+        if (array_key_exists('dest', $optInfo) === true
+            && $optInfo['dest'] === '@'
+        ) {
+            // Explicitly require array
+            // variable may not be array - convert if so
+            if (is_array($var) === true) {
+                Console_GetoptLong::_debug(
+                    "  it takes an array parameter and "
+                    . "is one: pushing $argument to it\n"
+                );
+
+                // Push to array
+                $var[] = $argument; 
+            } else {
+                Console_GetoptLong::_debug(
+                    "  it takes an array parameter and"
+                    . " isn't one: setting its variable"
+                    . " to an array of ($argument)\n"
+                );
+
+                // Start with an array.
+                $var = array($argument);
+            }
+        } else if (is_array($var) === true) {
+            Console_GetoptLong::_debug(
+                "  it takes a parameter and we've been"
+                . " given an array: pushing $argument"
+                . " onto it\n"
+            );
+
+            // @ not specified but array reference given
+            // Push to array
+            $var[] = $argument;
+        } else {
+            Console_GetoptLong::_debug(
+                "  it takes a parameter: setting its"
+                . " variable to $argument\n"
+            );
+
+            $var = $argument;
+        }
+    }
+    
+    /**
      * getOptions - set referenced variables from argument descriptions.
      *
      * This is the only function you will usually call in this module.
@@ -172,6 +247,9 @@ class Console_GetoptLong
      * If you supply your own description that includes 'help' or 'h' as
      * synonyms, you're on your own and automated help will not come forth. 
      * 
+     * TODO: handle --option=argument style options.
+     * TODO: handle -abcd (where a, b, c and d are single letter options).
+     *
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
      * command line, so (with the above argument description) it would be
@@ -219,7 +297,10 @@ class Console_GetoptLong
             }
 
             // Get the synonyms and the optional options
-            preg_match('{^([\w-]+(?:\|[\w-]+)*)([=:][sif]@?|[+!])?$}', $argdesc, $matches);
+            preg_match(
+                '{^([\w-]+(?:\|[\w-]+)*)([=:][sif]@?|[+!])?$}',
+                $argdesc, $matches
+            );
             if (empty($matches)) {
                 die("Do not recognise description '$argdesc'\n");
             }
@@ -298,6 +379,7 @@ class Console_GetoptLong
         // If we've got help descriptions supplied, add the help arguments
         // as lookup with our special magic value.
         if ($help_supplied) {
+            // warn if help supplied in parameters and also as an option
             if (array_key_exists('help', $arg_lookup)) {
                 echo "Warning: option 'help' already supplied, ignoring help "
                     . "supplied in targets\n";
@@ -305,7 +387,6 @@ class Console_GetoptLong
                 echo "Warning: option 'h' already supplied, ignoring help "
                     . "supplied in targets\n";
             } else {
-                // TODO: warn if help supplied in parameters and also as an option
                 // Help supplied and the caller hasn't specified their own
                 // option for it - let's handle that ourselves.
                 $arg_lookup['help'] = 'help'; // magic keyword
@@ -342,20 +423,34 @@ class Console_GetoptLong
                 break;
             } else if (substr($arg, 0, 1) === '-') {
                 // Starts with a - : does it start with --?
+                $dashes = '';
                 if (substr($arg, 0, 2) == '--') {
                     $option = substr($arg, 2);
+                    $dashes = '--';
                 } else {
                     $option = substr($arg, 1);
+                    $dashes = '-';
                 }
 
                 Console_GetoptLong::_debug(" Looks like option $option.\n");
 
+                $argInEquals = false;
+                if (strpos($option, '=') > 0) { // must be at least one character
+                    // we can't insert the value in the array, because
+                    // several things will break - e.g. argument supplied to
+                    // non-argument option
+                    list($option, $argInEquals) = explode('=', $option);
+                    // reconstruct full option with dashes (because people
+                    // expect to be warned about -m, not -m=foo)
+                    $arg = $dashes . $option;
+                }
                 if (array_key_exists($option, $arg_lookup) === true) {
                     Console_GetoptLong::_debug(
                         "  And it's an option we recognise\n"
                     );
 
                     $optInfo = $arg_lookup[$option];
+                    // TODO: only handle help here if we've been asked to.
                     if ($optInfo === 'help') {
                         // magic keyword
                         Console_GetoptLong::_showHelp($argHelp);
@@ -369,80 +464,42 @@ class Console_GetoptLong
                         $opt = $optInfo['opt'];
                         if ($opt === '=') {
                             // mandatory argument
-                            $i++;
-
-                            // Is there still command line left?
-                            if ($i < $numArgs) {
-                                // Yes: set the variable from the argument list
-                                // We're even allowed to take things that look
-                                // like options here!
-                                if (! Console_GetoptLong::_checkType(
-                                    $args[$i], $optInfo['type']
-                                )) {
-                                    die(
-                                        "$arg argument requires "
-                                        . Console_GetoptLong::$_typeLookup[
-                                            $optInfo['type']
-                                        ] . "\n"
-                                    );
-                                }
-                                if (array_key_exists('dest', $optInfo) === true
-                                    && $optInfo['dest'] === '@'
-                                ) {
-                                    // Explicitly require array
-                                    // variable may not be array - convert if so
-                                    if (is_array($var) === true) {
-                                        Console_GetoptLong::_debug(
-                                            "  it takes an array parameter and "
-                                            . "is one: pushing $args[$i] to it\n"
-                                        );
-
-                                        // Push to array
-                                        $var[] = $args[$i]; 
-                                    } else {
-                                        Console_GetoptLong::_debug(
-                                            "  it takes an array parameter and"
-                                            . " isn't one: setting its variable"
-                                            . " to an array of ($args[$i])\n"
-                                        );
-
-                                        // Start with an array.
-                                        $var = array($args[$i]);
-                                    }
-                                } else if (is_array($var) === true) {
-                                    Console_GetoptLong::_debug(
-                                        "  it takes a parameter and we've been"
-                                        . " given an array: pushing $args[$i] "
-                                        . "onto it\n"
-                                    );
-
-                                    // @ not specified but array reference given
-                                    // Push to array
-                                    $var[] = $args[$i];
-                                } else {
-                                    Console_GetoptLong::_debug(
-                                        "  it takes a parameter: setting its"
-                                        . " variable to $args[$i]\n"
-                                    );
-
-                                    $var = $args[$i];
-                                }
+                            // $argInEquals may be = '', check for falseness
+                            // explicitly.
+                            if ($argInEquals !== false) {
+                                Console_GetoptLong::_setVariable(
+                                    $optInfo, $arg, $argInEquals
+                                );
                             } else {
-                                // No: fail.
-                                die("Argument $arg missing its parameter\n");
-                            }//end if
+                                $i++;
+
+                                // Is there still command line left?
+                                if ($i >= $numArgs) {
+                                    // No: fail.
+                                    die("Argument $arg missing its parameter\n");
+                                }//end if
+                                Console_GetoptLong::_setVariable(
+                                    $optInfo, $arg, $args[$i]
+                                );
+                            }
                         } else if ($opt === ':') {
                             // optional argument
-                            // Is there still another option left?
-                            if (($i + 1) === $numArgs) {
+                            if ($argInEquals !== false) {
+                                Console_GetoptLong::_setVariable(
+                                    $optInfo, $arg, $argInEquals
+                                );
+                            } elseif (($i + 1) === $numArgs) {
+                                // Is there still another option left?
                                 // No - no argument supplied, set the variable to 1
                                 Console_GetoptLong::_debug(
                                     "  optional argument, none available: value 1\n"
                                 );
 
-                                $var = 1;
+                                Console_GetoptLong::_setVariable(
+                                    $optInfo, $arg, 1
+                                );
                             } else {
-                                // Does the next option look like a flag?
+                                // Yes - Does the next option look like a flag?
                                 if (substr($args[($i+1)], 0, 1) === '-') {
                                     // Yes - no argument supplied, set variable to 1
                                     Console_GetoptLong::_debug(
@@ -450,7 +507,9 @@ class Console_GetoptLong
                                         ." '-': value 1\n"
                                     );
 
-                                    $var = 1;
+                                    Console_GetoptLong::_setVariable(
+                                        $optInfo, $arg, 1
+                                    );
                                 } else {
                                     // No - it must be an argument, consume it
                                     $i++;
@@ -459,17 +518,9 @@ class Console_GetoptLong
                                         . " variable to $args[$i]\n"
                                     );
 
-                                    if (! Console_GetoptLong::_checkType(
-                                        $args[$i], $optInfo['type']
-                                    )) {
-                                        die(
-                                            "$arg argument requires "
-                                            . Console_GetoptLong::$_typeLookup[
-                                                $optInfo['type']
-                                            ] . "\n"
-                                        );
-                                    }
-                                    $var = $args[$i];
+                                    Console_GetoptLong::_setVariable(
+                                        $optInfo, $arg, $args[$i]
+                                    );
                                 }
                             }//end if
                         } else if ($opt === '+') {
