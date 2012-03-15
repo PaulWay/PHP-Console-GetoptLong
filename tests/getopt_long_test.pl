@@ -21,7 +21,7 @@ foreach my $aref (@tests) {
     next if $testprog eq 'package.xml' or $testprog eq 'subversion';
     unless (exists $testprog_required{$testprog}) {
         push @tests, [
-            "file test_$testprog must be in package.xml",
+            "file test_$testprog.php must be in package.xml",
             'package.xml',
             $testprog,
             'yes',

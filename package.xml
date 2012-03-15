@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-03-10</date>
- <time>06:36:00</time>
+ <date>2012-03-15</date>
+ <time>23:20:00</time>
  <version>
-  <release>1.9.0</release>
+  <release>1.9.1</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,10 +25,10 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Handle -option=argument and optional arguments with array targets.
- This involved combining some code, making the processing a bit cleaner and
- reducing copy-and-paste.  We also now check that the test files are in
- subversion as well as this package.</notes>
+ <notes>We now provide a function to set the behaviour on unrecognised
+ options (i.e. arguments starting with dashes) - ignore them, warn on them,
+ or discard them.  The default behaviour (which is preserved) is to store them
+ in the returned array as unprocessed command line arguments.</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -51,6 +51,7 @@
    <file baseinstalldir="/tests" name="tests/test_negatable.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_help.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_help_own.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_unknown_option_handling.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
@@ -67,6 +68,22 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.9.1</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-03-15</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now provide a function to set the behaviour on unrecognised
+   options (i.e. arguments starting with dashes) - ignore them, warn on them,
+   or discard them.  The default behaviour (which is preserved) is to store them
+   in the returned array as unprocessed command line arguments</notes>
+  </release>  
   <release>
    <version>
     <release>1.9.0</release>

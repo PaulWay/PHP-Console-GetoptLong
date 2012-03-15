@@ -49,6 +49,43 @@ class Console_GetoptLong
     );
     
     /**
+     * Should we warn, die, ignore, or put on the stack an option (i.e. with a
+     * - or -- prefix) that the user supplies on the command line that the
+     * caller hasn't recognised?
+     *
+     * @var    string
+     * @access private
+     */
+    private static $_unkOptHand = 'arg';
+    
+    /**
+     * setUnknownOptionHandling - set how we handle getting an unknown option.
+     *
+     * We can handle an option supplied by the user that the caller hasn't
+     * recognised in a number of ways:
+     *
+     * arg:     treat it as another non-option argument and put it in the 
+     *          returned array.
+     * warn:    warn the user about it but continue.
+     * die:     stop processing entirely.
+     * ignore:  discard it from processing entirely.
+     *
+     * Any string other than these will be ignored.
+     * 
+     * @param string $method The requested method for handling unknown options.
+     *
+     * @return none
+     */
+    function setUnknownOptionHandling($method = 'arg')
+    {
+        if ($method == 'arg' or $method == 'ignore'
+            or $method == 'warn' or $method == 'die'
+        ) {
+            Console_GetoptLong::$_unkOptHand = $method;
+        }
+    }    
+    
+    /**
      * _debug - print string if in debugging mode
      * 
      * @param string $string the string to print
@@ -247,8 +284,8 @@ class Console_GetoptLong
      * If you supply your own description that includes 'help' or 'h' as
      * synonyms, you're on your own and automated help will not come forth. 
      * 
-     * TODO: handle --option=argument style options.
      * TODO: handle -abcd (where a, b, c and d are single letter options).
+     * TODO: allow caller to pass in command-line-like array to process.
      *
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
@@ -450,8 +487,7 @@ class Console_GetoptLong
                     );
 
                     $optInfo = $arg_lookup[$option];
-                    // TODO: only handle help here if we've been asked to.
-                    if ($optInfo === 'help') {
+                    if ($optInfo === 'help' and $help_supplied) {
                         // magic keyword
                         Console_GetoptLong::_showHelp($argHelp);
                         exit(0);
@@ -544,13 +580,21 @@ class Console_GetoptLong
                         Console_GetoptLong::_debug(
                             "  it's a boolean: setting its variable to 1\n"
                         );
-
                         $var = 1;
                     }
                 } else {
-                    // Not a recognised argument argument: leave it unprocessed.
-                    // TODO: maybe we should warn about an unrecognised option?
-                    $unprocessedArgs[] = $arg;
+                    // Not a recognised argument argument: what do we do with it?
+                    if (Console_GetoptLong::$_unkOptHand == 'arg') {
+                        // push it on the unprocessed arguments array
+                        $unprocessedArgs[] = $arg;
+                    } else if (Console_GetoptLong::$_unkOptHand == 'warn') {
+                        // throw the user a warning
+                        echo "Warning: unrecognised option $arg\n";
+                    } else if (Console_GetoptLong::$_unkOptHand == 'die') {
+                        // throw the user an error
+                        die("Error: unrecognised option $arg\n");
+                    }
+                    // 'ignore' - just discard it
                 }
             } else {
                 // Not an argument: leave it unprocessed.
