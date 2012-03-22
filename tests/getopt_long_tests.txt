@@ -66,6 +66,9 @@ Mandatory arg from equals (long);mandatory_single;-mandatory=file;file,()
 Mandatory arg from equals (long double-dash);mandatory_single;--mandatory=file;file,()
 Mandatory arg from equals - zero-length string;mandatory_single;-m=;,()
 
+# Mandatory arguments in single-character-option-and-argument format
+Mandatory arg in option-and-argument format;mandatory_single;-mfoo;foo,()
+
 # Mandatory arguments (integer)
 Mandatory arg integer (no argument);mandatory_integer;;,()
 Mandatory arg integer normal;mandatory_integer;-m 1;1,()
@@ -80,6 +83,10 @@ Mandatory arg integer from equals (long double-dash);mandatory_integer;-mandator
 Mandatory arg integer from equals negative;mandatory_integer;-m=-43;-43,()
 Mandatory arg integer from equals error on string;mandatory_integer;-m=foo;-m argument requires an integer
 Mandatory arg integer from equals error on float;mandatory_integer;-m=-2.71828;-m argument requires an integer
+
+# Mandatory arguments (integer) in single-character-option-and-argument format
+Mandatory arg integer in option-and-argument format;mandatory_integer;-m345;345,()
+Mandatory arg integer in option-and-argument format error on string;mandatory_integer;-mfoo;-m argument requires an integer
 
 # Mandatory arguments into an array - explicit @ declaration in GetOptions
 Mandatory arg array explicit (no argument);mandatory_array_explicit;;,()

@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-03-15</date>
- <time>23:20:00</time>
+ <date>2012-03-22</date>
+ <time>14:53:00</time>
  <version>
-  <release>1.9.1</release>
+  <release>1.9.2</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,10 +25,8 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>We now provide a function to set the behaviour on unrecognised
- options (i.e. arguments starting with dashes) - ignore them, warn on them,
- or discard them.  The default behaviour (which is preserved) is to store them
- in the returned array as unprocessed command line arguments.</notes>
+ <notes>We now recognise single-letter options in option-and-argument format -
+ e.g. -fout.txt, -w640.</notes>
  <contents>
   <dir baseinstalldir="Console" name="/">
    <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
@@ -68,6 +66,20 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.9.2</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-03-22</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now recognise single-letter options in option-and-argument format
+    - e.g. -fout.txt, -w640.</notes>
+  </release>  
   <release>
    <version>
     <release>1.9.1</release>
