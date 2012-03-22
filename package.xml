@@ -28,8 +28,8 @@
  <notes>We now recognise single-letter options in option-and-argument format -
  e.g. -fout.txt, -w640.</notes>
  <contents>
-  <dir baseinstalldir="Console" name="/">
-   <file baseinstalldir="Console" name="Console/GetoptLong.php" role="php">
+  <dir name="/">
+   <file name="Console/GetoptLong.php" role="php">
     <tasks:replace from="@package_version@" to="version" type="package-info" />
    </file>
    <file baseinstalldir="/tests" name="tests/getopt_long_test.pl" role="test" />

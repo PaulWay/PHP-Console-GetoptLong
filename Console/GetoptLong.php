@@ -583,7 +583,7 @@ class Console_GetoptLong
                         $var = 1;
                     }
                 } else if (substr($arg, 1, 1) != '-'
-                    and array_key_exists(substr($arg, 1, 1), $arg_lookup) === true
+                    and array_key_exists(substr($arg, 1, 1), $arg_lookup)
                     and array_key_exists('opt', $arg_lookup[substr($arg, 1, 1)])
                     and $arg_lookup[substr($arg, 1, 1)]['opt'] == '='
                 ) {
