@@ -228,6 +228,7 @@ class Console_GetoptLong
      * variable to set when that option is supplied on the command line.
      *
      * @param array $argDescriptions Describing the arguments to the program.
+     * @param array $args            Optional 'command line' to process.
      *
      * The arguments are described in description => reference pairs.
      *
@@ -284,8 +285,12 @@ class Console_GetoptLong
      * If you supply your own description that includes 'help' or 'h' as
      * synonyms, you're on your own and automated help will not come forth. 
      * 
+     * Normally the caller will not need to use the $args array, and in this
+     * case the argument list will be taken from the command line.  However, if
+     * the caller wants to process a list of arguments of their own, this list
+     * can be passed as the second parameter to getOptions.
+     *
      * TODO: handle -abcd (where a, b, c and d are single letter options).
-     * TODO: allow caller to pass in command-line-like array to process.
      *
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
@@ -298,7 +303,7 @@ class Console_GetoptLong
      *
      */
     
-    function getOptions($argDescriptions)
+    function getOptions($argDescriptions, Array $args = Array())
     {
 
         // Preprocess argument descriptions to look up names and info
@@ -433,7 +438,15 @@ class Console_GetoptLong
 
         // Now go through the arguments.
         $unprocessedArgs = array();
-        $args = $_SERVER['argv'];
+        // If we haven't been given an args array in the call, get it from
+        // the server's command line
+        if (count($args) == 0) {
+            Console_GetoptLong::_debug(
+                "No args list given by caller, getting them from ARGV."
+                ."  This is normal\n"
+            );
+            $args = $_SERVER['argv'];
+        }
 
         // Remove name of script from argument list.
         array_shift($args);
@@ -447,9 +460,10 @@ class Console_GetoptLong
             if ($arg === '--') {
                 // Process no more arguments and exit while loop now.
                 Console_GetoptLong::_debug(
-                    "Received double dash at argument $i: already "
-                    . implode(',', $unprocessedArgs) . ", rest is " 
-                    . implode(',', array_slice($args, $i + 1)) . "\n"
+                    "Received double dash at argument $i: ( "
+                    . implode(',', $unprocessedArgs)
+                    . ") so far unprocesed, rest is (" 
+                    . implode(',', array_slice($args, $i + 1)) . ")\n"
                 );
                 array_splice(
                     $unprocessedArgs,
@@ -487,7 +501,7 @@ class Console_GetoptLong
                     );
 
                     $optInfo = $arg_lookup[$option];
-                    if ($optInfo === 'help' and $help_supplied) {
+                    if ($optInfo === 'help') { // help has already been supplied
                         // magic keyword
                         Console_GetoptLong::_showHelp($argHelp);
                         exit(0);
