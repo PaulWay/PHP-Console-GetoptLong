@@ -65,7 +65,6 @@ Mandatory arg from equals (short);mandatory_single;-m=file;file,()
 Mandatory arg from equals (long);mandatory_single;-mandatory=file;file,()
 Mandatory arg from equals (long double-dash);mandatory_single;--mandatory=file;file,()
 Mandatory arg from equals - zero-length string;mandatory_single;-m=;,()
-Mandatory arg single letter plus value;mandatory_single;-mfoo;foo,()
 
 # Mandatory arguments in single-character-option-and-argument format
 Mandatory arg in option-and-argument format;mandatory_single;-mfoo;foo,()
@@ -84,7 +83,6 @@ Mandatory arg integer from equals (long double-dash);mandatory_integer;-mandator
 Mandatory arg integer from equals negative;mandatory_integer;-m=-43;-43,()
 Mandatory arg integer from equals error on string;mandatory_integer;-m=foo;-m argument requires an integer
 Mandatory arg integer from equals error on float;mandatory_integer;-m=-2.71828;-m argument requires an integer
-Mandatory arg integer single letter plus value;mandatory_integer;-m640;640,()
 
 # Mandatory arguments (integer) in single-character-option-and-argument format
 Mandatory arg integer in option-and-argument format;mandatory_integer;-m345;345,()
@@ -101,7 +99,10 @@ Mandatory arg array explicit with extra during;mandatory_array_explicit;-m file1
 Mandatory arg array explicit with extra after;mandatory_array_explicit;-m file1 -m file2 foo;(file1,file2),(foo)
 Mandatory arg array explicit from equals;mandatory_array_explicit;-m=file1 -m=file2;(file1,file2),()
 Mandatory arg array explicit from equals mixed;mandatory_array_explicit;-m=file1 -mandatory file2;(file1,file2),()
-Mandatory arg array explicit single letter plus value;mandatory_array_explicit;-mfoo -mbar;(foo,bar),()
+
+# Mandatory arguments in single-character-option-and-argument format
+Mandatory arg array explicit single letter plus value one argument;mandatory_array_explicit;-mfoo;(foo),()
+Mandatory arg array explicit single letter plus value multiple arguments;mandatory_array_explicit;-mfoo -mbar;(foo,bar),()
 
 # Mandatory arguments into an array - implicit via passing an array reference
 Mandatory arg array implicit (short);mandatory_array_implicit;-m file1 -m file2;(file1,file2),()
@@ -113,7 +114,10 @@ Mandatory arg array implicit with extra during;mandatory_array_implicit;-m file1
 Mandatory arg array implicit with extra after;mandatory_array_implicit;-m file1 -m file2 foo;(file1,file2),(foo)
 Mandatory arg array implicit from equals;mandatory_array_implicit;-m=file1 -m=file2;(file1,file2),()
 Mandatory arg array implicit from equals mixed;mandatory_array_implicit;-m=file1 --mandatory file2;(file1,file2),()
-Mandatory arg array explicit single letter plus value;mandatory_array_implicit;-mfoo -mbar;(foo,bar),()
+
+# Mandatory arguments in single-character-option-and-argument format
+Mandatory arg array implicit single letter plus value one argument;mandatory_array_implicit;-mfoo;(foo),()
+Mandatory arg array implicit single letter plus value multiple arguments;mandatory_array_implicit;-mfoo -mbar;(foo,bar),()
 
 # Optional arguments
 Optional arg (no arguments);optional_single;;,()
