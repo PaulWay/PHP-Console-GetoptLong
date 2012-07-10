@@ -379,21 +379,15 @@ class Console_GetoptLong
             }
 
             foreach (explode('|', $synonyms) as $synonym) {
-                // This is actually handled by the regexp now.
-                if (strlen($synonym) < 1) {
-                    print("Warning: key $synonyms started or ended with |.\n");
-                    continue;
-                }
-
-                Console_GetoptLong::_debug(
-                    "Putting synonym $synonym of $synonyms in arg_lookup\n"
-                );
 
                 // check for existing synonyms
                 if (array_key_exists($synonym, $arg_lookup)) {
                     print("Warning: synonym $synonym declared twice - ignoring.\n");
                 } else {
                     $arg_lookup[$synonym] = $optInfo;
+                    Console_GetoptLong::_debug(
+                        "Putting synonym $synonym of $synonyms in arg_lookup\n"
+                    );
                 }
                 if ($optstr === '!') {
                     // Add a 'no' prefix option to the list of synonyms
@@ -407,10 +401,10 @@ class Console_GetoptLong
                         );
                     } else {
                         $arg_lookup["no$synonym"] = $optInfo;
+                        Console_GetoptLong::_debug(
+                            "Got negatable option, added no$synonyms[0] option\n"
+                        );
                     }
-                    Console_GetoptLong::_debug(
-                        "Got negatable option, added no$synonyms[0] option\n"
-                    );
                 }
             }
         }//end foreach
