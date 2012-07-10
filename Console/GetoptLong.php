@@ -191,9 +191,8 @@ class Console_GetoptLong
                 $var[] = $argument; 
             } else {
                 Console_GetoptLong::_debug(
-                    "  it takes an array parameter and"
-                    . " isn't one: setting its variable"
-                    . " to an array of ($argument)\n"
+                    "  it takes an array parameter and isn't one: setting its"
+                    . " variable to an array of ($argument)\n"
                 );
 
                 // Start with an array.
@@ -201,9 +200,8 @@ class Console_GetoptLong
             }
         } else if (is_array($var) === true) {
             Console_GetoptLong::_debug(
-                "  it takes a parameter and we've been"
-                . " given an array: pushing $argument"
-                . " onto it\n"
+                "  it takes a parameter and we've been given an array:"
+                . " pushing $argument onto it\n"
             );
 
             // @ not specified but array reference given
@@ -211,8 +209,7 @@ class Console_GetoptLong
             $var[] = $argument;
         } else {
             Console_GetoptLong::_debug(
-                "  it takes a parameter: setting its"
-                . " variable to $argument\n"
+                "  it takes a parameter: setting its variable to $argument\n"
             );
 
             $var = $argument;
