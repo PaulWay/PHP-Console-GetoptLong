@@ -22,7 +22,7 @@
  * @author    Paul Wayper <paulway@mabula.net>
  * @copyright 2012 Paul Wayper
  * @license   http://www.php.net/license/3_01.txt PHP 3.01
- * @version   Release: 1.6.4
+ * @version   Release: @package_version@
  * @link      <pear package page URL>
  */
 class Console_GetoptLong
@@ -86,6 +86,28 @@ class Console_GetoptLong
     }    
     
     /**
+     * Should we check unrecognised options to be checked whether they're
+     * possibly made up of single letter options?
+     *
+     * @var    boolean
+     * @access private
+     */
+    private static $_allowMultiOptCheck = true;
+
+    /**
+     * setAllowMultipleOptionsCheck - set whether we allow multiple flag options
+     * in one 'agglomerated' option.
+     *
+     * @param boolean $allow Whether or not multiple flags can be agglomerated
+     *
+     * @return none
+     */
+    function setAllowMultipleOptionsCheck($allow = true)
+    {
+        Console_GetoptLong::$_allowMultiOptCheck = $allow;
+    }
+    
+    /**
      * _debug - print string if in debugging mode
      * 
      * @param string $string the string to print
@@ -145,6 +167,48 @@ class Console_GetoptLong
     }
     
     /**
+     * _checkMultiOpts - can this option be constructed out of single letters?
+     *
+     * Many older programs - tar being a classic example - allow many single
+     * letter arguments to be glommed into one - for example, tar -cvfj is
+     * equivalent to tar -c -v -f -j.  Here we only allow this to occur if
+     * every single letter is an option that does not require an argument, to
+     * avoid confusion about which (following) argument relates to which option.
+     *
+     * This is called from the if/else clause that steps through the
+     * possibilities of option recognition, so we simply accept the string to
+     * check and return true or false.  The caller can then step through the
+     * letters with confidence.  We don't check $_allowMultiOptCheck here, the
+     * caller can do that.
+     *
+     * @param array  $arg_lookup the option information array.
+     * @param string $str        the string to check for single-letter options.
+     * 
+     * @return boolean whether all the letters were single-letter options
+     */
+    private function _checkMultiOpts($arg_lookup, $str)
+    {
+        Console_GetoptLong::_debug("   Checking '$str' for agglomerated flags\n");
+        for ($c = 0; $c < strlen($str); $c++) {
+            // if we don't have an option like that, fail now
+            $letter = substr($str, $c, 1);
+            if (! array_key_exists($letter, $arg_lookup)) {
+                return false;
+            }
+            // if we have an option it has to not take any arguments
+            // (this may be something we can handle in the future though)
+            if (array_key_exists('opt', $arg_lookup[$letter])
+                and ($arg_lookup[$letter]['opt'] == ':'
+                or $arg_lookup[$letter]['opt'] == '=')
+            ) {
+                return false;
+            }
+        }
+        Console_GetoptLong::_debug("   ... it is!\n");
+        return true;
+    }
+    
+    /**
      * _setVariable - set the variable from the option's argument.
      *
      * Takes the pre-processed knowledge of this option, the option as
@@ -166,9 +230,9 @@ class Console_GetoptLong
     private function _setVariable($optInfo, $option, $argument)
     {
         $var = &$optInfo['var'];
-        if (! Console_GetoptLong::_checkType(
-            $argument, $optInfo['type']
-        )) {
+        if (array_key_exists('type', $optInfo)
+            and ! Console_GetoptLong::_checkType($argument, $optInfo['type'])
+        ) {
             die(
                 "$option argument requires "
                 . Console_GetoptLong::$_typeLookup[
@@ -286,8 +350,6 @@ class Console_GetoptLong
      * case the argument list will be taken from the command line.  However, if
      * the caller wants to process a list of arguments of their own, this list
      * can be passed as the second parameter to getOptions.
-     *
-     * TODO: handle -abcd (where a, b, c and d are single letter options).
      *
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
@@ -601,6 +663,21 @@ class Console_GetoptLong
                     $shortarg = substr($arg, 1, 1);
                     $optInfo = $arg_lookup[$shortarg];
                     Console_GetoptLong::_setVariable($optInfo, $fullarg, $val);
+                } else if (Console_GetoptLong::$_allowMultiOptCheck
+                    and Console_GetoptLong::_checkMultiOpts($arg_lookup, $option)
+                ) {
+                    // A single option that's made up of multiple single letter
+                    // options - process each option individually, allow repeats.
+                    for ($i = 0; $i < strlen($option); $i++) {
+                        $letter = substr($option, $i, 1);
+                        // pretend that we were given the -$letter option; these
+                        // can only be flags at the moment so just set them to 1.
+                        Console_GetoptLong::_debug(
+                            "  setting flag for de-agglomerated $letter\n"
+                        );
+                        $var = &$arg_lookup[$letter]['var'];
+                        $var = 1;
+                    }
                 } else {
                     // Not a recognised argument argument: what do we do with it?
                     if (Console_GetoptLong::$_unkOptHand == 'arg') {

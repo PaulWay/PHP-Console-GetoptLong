@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-05-07</date>
- <time>12:00:00</time>
+ <date>2012-07-11</date>
+ <time>15:40:00</time>
  <version>
-  <release>1.9.3</release>
+  <release>1.9.4</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,8 +25,8 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>The caller can now pass an array of 'arguments' to process instead of
- reading them only from the command line.</notes>
+ <notes>Single letter options can now be 'agglomerated' as options - for
+ example, -c -a -t can be specified as -cat (or --tca).</notes>
  <contents>
   <dir name="/">
    <file name="Console/GetoptLong.php" role="php">
@@ -66,6 +66,20 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.9.4</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-07-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Single letter options can now be 'agglomerated' as options - for
+ example, -c -a -t can be specified as -cat (or --tca).</notes>
+  </release>  
   <release>
    <version>
     <release>1.9.3</release>

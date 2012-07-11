@@ -268,5 +268,20 @@ Ignore unrecognised option, both types, short;unknown_option_handling;ignore -m 
 Ignore unrecognised option, both types, long;unknown_option_handling;ignore --mandatory foo --bar;foo,(ignore)
 Ignore unrecognised option, both types, mixed;unknown_option_handling;ignore --bar -m foo;foo,(ignore)
 
+# Accept argument list from caller
+
+# Allow multiple-single-letter option agglomeration
+Multiple single letter agglomeration, single 1;single_agglom;-a;1,0,0,()
+Multiple single letter agglomeration, single 2;single_agglom;-b;0,1,0,()
+Multiple single letter agglomeration, single 3;single_agglom;-c;0,0,1,()
+Multiple single letter agglomeration, double 1 2;single_agglom;-ab;1,1,0,()
+Multiple single letter agglomeration, double 1 3;single_agglom;-ac;1,0,1,()
+Multiple single letter agglomeration, double 2 3;single_agglom;-bc;0,1,1,()
+Multiple single letter agglomeration, all three, perm 1;single_agglom;-abc;1,1,1,()
+Multiple single letter agglomeration, all three, perm 2;single_agglom;-bca;1,1,1,()
+Multiple single letter agglomeration, all three, perm 2;single_agglom;-cba;1,1,1,()
+Multiple single letter agglomeration, extra letter at start: new option;single_agglom;-dab;0,0,0,(-dab)
+Multiple single letter agglomeration, extra letter in middle: new option;single_agglom;-adb;0,0,0,(-adb)
+Multiple single letter agglomeration, extra letter at end: new option;single_agglom;-abd;0,0,0,(-abd)
 
 
