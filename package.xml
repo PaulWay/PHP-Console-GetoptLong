@@ -50,6 +50,7 @@
    <file baseinstalldir="/tests" name="tests/test_help.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_help_own.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_unknown_option_handling.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_single_agglom.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
