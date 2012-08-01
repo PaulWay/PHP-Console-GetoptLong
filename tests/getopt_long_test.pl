@@ -49,28 +49,35 @@ close $fh;
 #    , join(',',sort keys %testprog_in_package),")\n";
 
 # Test anywhere protocol:
-print "1..",scalar @tests, "\n";
-my $testno = 0;
-foreach my $aref (@tests) {
-	$testno++;
-    my $actual;
-	my ($description, $testprog, $args, $expected) = @$aref;
-	$args =~ s{([|!])}{\\$1}g; # escape pipes in args for test_setup
-	#print "php test_$testprog.php $args\n";
-	if ($testprog eq 'package.xml') {
-	    $actual = $testprog_in_package{$args} || 'no';
-    } elsif ($testprog eq 'subversion') {
-        my $fname = "test_$args.php";
-        my $svninfo = qx{svn info $fname 2>/dev/null};
-        $actual = ($svninfo =~ m{Name: $fname}) ? 'yes' : 'no';
-	} else {
-    	$expected =~ s{\\n}{\n}g; # turn \n into newlines for test_help
-        $actual   = qx{php test_$testprog.php $args};
-        chomp $actual;
-    }
-    if ($expected eq $actual) {
-		print "ok $testno $description.\n";
-	} else {
-		print "not ok $testno $description: wanted $expected, got $actual.\n";
+if (scalar @tests) {
+	print "1..",scalar @tests, "\n";
+	my $testno = 0;
+	
+	foreach my $aref (@tests) {
+		$testno++;
+	    my $actual;
+		my ($description, $testprog, $args, $expected) = @$aref;
+		$args =~ s{([|!])}{\\$1}g; # escape pipes in args for test_setup
+		#print "php test_$testprog.php $args\n";
+		if ($testprog eq 'package.xml') {
+		    $actual = $testprog_in_package{$args} || 'no';
+	    } elsif ($testprog eq 'subversion') {
+	        my $fname = "test_$args.php";
+	        my $svninfo = qx{svn info $fname 2>/dev/null};
+	        $actual = ($svninfo =~ m{Name: $fname}) ? 'yes' : 'no';
+		} else {
+	    	$expected =~ s{\\n}{\n}g; # turn \n into newlines for test_help
+	        $actual   = qx{php test_$testprog.php $args};
+	        chomp $actual;
+	    }
+	    if ($expected eq $actual) {
+			print "ok $testno $description.\n";
+		} else {
+			print "not ok $testno $description: wanted $expected, got $actual.\n";
+		}
 	}
+	
+} else {
+	print "Woah woah woah, we're supposed to do some testing here but you gave me no tests!\n";
+	exit 1
 }
