@@ -379,8 +379,6 @@ class Console_GetoptLong
      * not numbered are ignored - so if you have _1, _2 and _4, the third
      * argument will be left in the argument list to be passed back.
      *
-     * TODO: set debug if $_ENV[Console_GetoptLong_Debug] is set
-     *
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
      * command line, so (with the above argument description) it would be
@@ -394,6 +392,10 @@ class Console_GetoptLong
     
     function getOptions($argDescriptions, Array $args = Array())
     {
+        // Set debug if environment requests it
+        if (getenv('Console_GetoptLong_Debug')) {
+            Console_GetoptLong::$_debug = true;
+        }
 
         // Preprocess argument descriptions to look up names and info
         $arg_lookup = array();
