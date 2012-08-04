@@ -14,10 +14,10 @@
   <email>paulway@mabula.net</email>
   <active>yes</active>
  </lead>
- <date>2012-07-11</date>
- <time>15:40:00</time>
+ <date>2012-08-04</date>
+ <time>11:08:00</time>
  <version>
-  <release>1.9.4</release>
+  <release>1.9.5</release>
   <api>1.1</api>
  </version>
  <stability>
@@ -25,8 +25,8 @@
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license/3_01.txt">PHP</license>
- <notes>Single letter options can now be 'agglomerated' as options - for
- example, -c -a -t can be specified as -cat (or --tca).</notes>
+ <notes>Ordered unflagged options can now be specified with _1 .. _9 - these
+ pick arguments off the command line after flagged options are processed.</notes>
  <contents>
   <dir name="/">
    <file name="Console/GetoptLong.php" role="php">
@@ -51,6 +51,7 @@
    <file baseinstalldir="/tests" name="tests/test_help_own.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_unknown_option_handling.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test_single_agglom.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_ordered_unflagged.php" role="test" />
    <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
    <file baseinstalldir="/" name="README" role="doc" />
   </dir>
@@ -67,6 +68,20 @@
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <version>
+    <release>1.9.5</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-08-04</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Ordered unflagged options can now be specified with _1 .. _9 - these
+ pick arguments off the command line after flagged options are processed.</notes>
+  </release>  
   <release>
    <version>
     <release>1.9.4</release>
