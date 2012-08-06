@@ -311,4 +311,11 @@ Ordered unflagged options, four (unflagged);ordered_unflagged;foo bar baz burfl;
 # Ordered unflagged options should not drain the command line if they've already been assigned
 Ordered unflagged options, one flagged, one not;ordered_unflagged;-f foo bar baz;foo,baz,(bar)
 Ordered unflagged options, one not, one flagged;ordered_unflagged;-s foo bar baz;bar,foo,(baz)
+# Ordered unflagged options can be anywhere on the command line
+Ordered unflagged options interspersed with normal options, first pre;ordered_unflagged;-f bar foo baz;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, first mid;ordered_unflagged;foo -f bar baz;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, first post;ordered_unflagged;foo baz -f bar;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, second pre;ordered_unflagged;-s foo bar baz;bar,foo,(baz)
+Ordered unflagged options interspersed with normal options, second mid;ordered_unflagged;bar -s foo baz;bar,foo,(baz)
+Ordered unflagged options interspersed with normal options, second post;ordered_unflagged;bar baz -s foo;bar,foo,(baz)
 
