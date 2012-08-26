@@ -24,6 +24,9 @@
  * @license   http://www.php.net/license/3_01.txt PHP 3.01
  * @version   Release: @package_version@
  * @link      <pear package page URL>
+ *
+ * For the main documentation on how to use this module, see the documentation
+ * for the 'getOptions' command or the README file supplied with this module.
  */
 class Console_GetoptLong
 {
@@ -625,8 +628,9 @@ class Console_GetoptLong
                     );
 
                     $optInfo = $arg_lookup[$option];
-                    if ($optInfo === 'help') { // help has already been supplied
-                        // magic keyword
+                    if ($optInfo === 'help' // our magic keyword
+                        and $help_supplied  // help has already been supplied
+                    ) { 
                         Console_GetoptLong::_showHelp($argHelp);
                         exit(0);
                     }
