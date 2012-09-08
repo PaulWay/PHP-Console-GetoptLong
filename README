@@ -46,11 +46,11 @@ So we might ask for those arguments to be processed from the command
 line with the following invocation:
 
 $args = Console_GetoptLong::getOptions(
-     'quiet|q'       => &$quiet,
-     'verbose|v+'    => &$verbose,
-     'input|i=s@'    => &$inputs,
-     'output|o=s'    => &$outupt,
-     'debug|d+'      => &$debug,
+    'quiet|q'       => &$quiet,
+    'verbose|v+'    => &$verbose,
+    'input|i=s@'    => &$inputs,
+    'output|o=s'    => &$output,
+    'debug|d+'      => &$debug,
 );
 
 Argument descriptions can be in any order (naturally).  Each option
@@ -62,7 +62,39 @@ as the more usual -i and --input).
 If you do not supply a @ descriptor, but reference an array, the items
 will be put into the array automatically (i.e. the argument will be
 treated as if described by @).
- 
+
+Showing help
+============
+
+There is an alternate way of specifying options which includes the ability to
+include help text describing each option:
+
+$args = Console_GetoptLong::getOptions(
+    'quiet|q'       => array(
+        'var'   => &$quiet,
+        'help'  => 'Do not show progress'
+    ),
+    'verbose|v+'    => array(
+        'var'   => &$verbose,
+        'help'  => 'Show more processing information'
+    ),
+    'input|i=s@'    => array(
+        'var'   => &$inputs,
+        'help'  => 'One or more input files'
+    ),
+    'output|o=s'    => array(
+        'var'   => &$output,
+        'help'  => 'Output file'
+    ),
+    'debug|d+'      => array(
+        'var'   => &$debug,
+        'help'  => 'Turn on full debugging output'
+    ),
+);
+
+If any option has this format, 
+
+
 Returned values
 ===============
 
@@ -74,4 +106,3 @@ valid to call the related program with the arguments:
 -v -v convert_to_proteins -i viruses.fasta -o viruses.prot
 
 Which would then return an array with the word 'convert_to_proteins'.
-
