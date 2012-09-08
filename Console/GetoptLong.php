@@ -303,6 +303,73 @@ class Console_GetoptLong
         Console_GetoptLong::_debug("  we've set it now.\n");
         Console_GetoptLong::$_optionIsSet[$optInfo['descript']] = true;
     }
+
+    /**
+     * _setOrderedUnflaggedArgument - what it says on the tin.
+     *
+     * This is called in two places - one as the special case for the last
+     * argument on the command line, named '-1', and then for each ordered
+     * unflagged option thereafter.  It checks whether the variable that was
+     * associated with this ordered unflagged argument has already been set,
+     * and if not it sets it and removes it from the list of arguments.
+     *
+     * @param array  $pos              one-based array index of argument
+     * @param array  $optInfo          standard options-info array entry
+     * @param array  &$unprocessedArgs array of unprocessed arguments
+     * @param string $argDesc          description of this argument's place
+     *
+     * @return none
+     */
+    private function _setOrderedUnflaggedArgument(
+        $pos, $optInfo, &$unprocessedArgs, $argDesc
+    ) {
+        if (array_key_exists($pos-1, $unprocessedArgs)) {
+            Console_GetoptLong::_debug(
+                " Yes - has it already been set?\n"
+            );
+            if (array_key_exists(
+                $optInfo['descript'],
+                Console_GetoptLong::$_optionIsSet
+            )) {
+                Console_GetoptLong::_debug(
+                    " It's already set - nothing to do\n"
+                );
+            } else {
+                // Set the variable - cheat on the name of the option
+                Console_GetoptLong::_setVariable(
+                    $optInfo,
+                    "command line parameter $pos",
+                    $unprocessedArgs[$pos-1]
+                );
+                // Remove it from the unprocessed arguments list
+                Console_GetoptLong::_debug(
+                    " Removing argument $pos from remaining arguments.\n"
+                );
+                array_splice($unprocessedArgs, $pos-1, 1);
+            }
+        } else {
+            Console_GetoptLong::_debug(
+                " No - is it a mandatory argument and not already set?\n"
+            );
+            // We can assert that it has a type, since the initial
+            // processing only allows mandatory and optional arguments
+            // to have unflagged ordered synonyms
+            if ($optInfo['opt'] == '='
+                and ! array_key_exists(
+                    $optInfo['descript'],
+                    Console_GetoptLong::$_optionIsSet
+                )
+            ) {
+                die(
+                    "Mandatory argument required in position"
+                    . " $pos on command line.\n"
+                );
+            }
+            // else optional argument is blank - which is a valid
+            // value.  Should it be set to 1, though, as optional
+            // arguments are if they don't get given a value?
+        }
+    }
     
     /**
      * getOptions - set referenced variables from argument descriptions.
@@ -488,10 +555,9 @@ class Console_GetoptLong
             foreach (explode('|', $synonyms) as $synonym) {
 
                 // check for ordered unflagged synonym
-                if (strlen($synonym) == 2
-                    and substr($synonym, 0, 1) == '_'
-                    and substr($synonym, 1, 1) >= 1
-                    and substr($synonym, 1, 1) <= 9
+                if ((strlen($synonym) == 2 and substr($synonym, 0, 1) == '_'
+                    and substr($synonym, 1, 1) >= 1 and substr($synonym, 1, 1) <= 9)
+                    or (strlen($synonym == 3) and substr($synonym, 1, 2) == '-1')
                 ) {
                     $position = substr($synonym, 1, 1);
                     Console_GetoptLong::_debug(
@@ -795,6 +861,23 @@ class Console_GetoptLong
                 'Processing ' . count($ordered_unflagged_args)
                 . " ordered unflagged arguments.\n"
             );
+            // Do we have a '-1' ordered option - i.e. the last argument
+            // on the command line?  If so, process it first and remove it
+            // from the list of ordered unflagged arguments
+            if (array_key_exists('-1', $ordered_unflagged_args)) {
+                Console_GetoptLong::_debug(
+                    " We have an argument in last position (-1).\n"
+                );
+                // Remember, position is a one-based array index - no decrement
+                Console_GetoptLong::_setOrderedUnflaggedArgument(
+                    count($ordered_unflagged_args),
+                    $ordered_unflagged_args['-1'],
+                    $unprocessedArgs,
+                    'last command line parameter'
+                );
+                // Remove this option from the ordered unflagged options.
+                array_splice($unprocessedArgs, $pos, 1);
+            }
             // Read arguments in order, starting from the back.  This may sound
             // strange, but means we can splice the elements out of the array
             // without disturbing the order, thus processing the array in one go.
@@ -804,52 +887,11 @@ class Console_GetoptLong
                     " Checking that we have an argument in position $pos.\n"
                 );
                 // We've numbered from 1, but array keys are from zero
-                if (array_key_exists($pos-1, $unprocessedArgs)) {
-                    Console_GetoptLong::_debug(
-                        " Yes - has it already been set?\n"
-                    );
-                    if (array_key_exists(
-                        $optInfo['descript'],
-                        Console_GetoptLong::$_optionIsSet
-                    )) {
-                        Console_GetoptLong::_debug(
-                            " Yes - move on, our work is done here\n"
-                        );
-                    } else {
-                        // Set the variable - cheat on the name of the option
-                        Console_GetoptLong::_setVariable(
-                            $optInfo,
-                            "command line parameter $pos",
-                            $unprocessedArgs[$pos-1]
-                        );
-                        // Remove it from the unprocessed arguments list
-                        Console_GetoptLong::_debug(
-                            " Removing argument $pos from remaining arguments.\n"
-                        );
-                        array_splice($unprocessedArgs, $pos-1, 1);
-                    }
-                } else {
-                    Console_GetoptLong::_debug(
-                        " No - is it a mandatory argument and not already set?\n"
-                    );
-                    // We can assert that it has a type, since the initial
-                    // processing only allows mandatory and optional arguments
-                    // to have unflagged ordered synonyms
-                    if ($optInfo['opt'] == '='
-                        and ! array_key_exists(
-                            $optInfo['descript'],
-                            Console_GetoptLong::$_optionIsSet
-                        )
-                    ) {
-                        die(
-                            "Mandatory argument required in position"
-                            . " $pos on command line.\n"
-                        );
-                    }
-                    // else optional argument is blank - which is a valid
-                    // value.  Should it be set to 1, though, as optional
-                    // arguments are if they don't get given a value?
-                }
+                Console_GetoptLong::_setOrderedUnflaggedArgument(
+                    $pos, $optInfo,
+                    $unprocessedArgs,
+                    "command line parameter $pos"
+                );
             }
         }
 
