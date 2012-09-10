@@ -294,30 +294,47 @@ Multiple single letter agglomeration, extra letter at end: new option;single_agg
 # values up from the non-flagged options in the command line in order.
 # First argument is mandatory, second is optional.
 # No arguments should warn on missing first argument only
-Ordered unflagged options, no options - error;ordered_unflagged;;Mandatory argument required in position 1 on command line.
+Ordered unflagged options, no options - error;ordered_unflagged;;Mandatory argument required for command line parameter 1.
 # Only first argument set in various ways
-Ordered unflagged options, one (short);ordered_unflagged;-f foo;foo,,,()
-Ordered unflagged options, one (long);ordered_unflagged;-first foo;foo,,,()
-Ordered unflagged options, one (short double-dash);ordered_unflagged;--f foo;foo,,,()
-Ordered unflagged options, one (long double-dash);ordered_unflagged;--first foo;foo,,,()
-Ordered unflagged options, one (unflagged);ordered_unflagged;foo;foo,,,()
+Ordered unflagged options, one (short);ordered_unflagged;-f foo;foo,,()
+Ordered unflagged options, one (long);ordered_unflagged;-first foo;foo,,()
+Ordered unflagged options, one (short double-dash);ordered_unflagged;--f foo;foo,,()
+Ordered unflagged options, one (long double-dash);ordered_unflagged;--first foo;foo,,()
+Ordered unflagged options, one (unflagged);ordered_unflagged;foo;foo,,()
 # Only second argument set in various ways - mandatory first argument
-Ordered unflagged options, one (short) - error;ordered_unflagged;-s bar;Mandatory argument required in position 1 on command line.
-Ordered unflagged options, one (long) - error;ordered_unflagged;-second bar;Mandatory argument required in position 1 on command line.
-Ordered unflagged options, one (short double-dash) - error;ordered_unflagged;--s bar;Mandatory argument required in position 1 on command line.
-Ordered unflagged options, one (long double-dash) - error;ordered_unflagged;--second bar;Mandatory argument required in position 1 on command line.
+Ordered unflagged options, one (short) - error;ordered_unflagged;-s bar;Mandatory argument required for command line parameter 1.
+Ordered unflagged options, one (long) - error;ordered_unflagged;-second bar;Mandatory argument required for command line parameter 1.
+Ordered unflagged options, one (short double-dash) - error;ordered_unflagged;--s bar;Mandatory argument required for command line parameter 1.
+Ordered unflagged options, one (long double-dash) - error;ordered_unflagged;--second bar;Mandatory argument required for command line parameter 1.
 # More arguments should fill the second option and the returned args list
-Ordered unflagged options, two (unflagged);ordered_unflagged;foo bar;foo,bar,,()
-Ordered unflagged options, three (unflagged);ordered_unflagged;foo bar baz;foo,bar,,(baz)
-Ordered unflagged options, four (unflagged);ordered_unflagged;foo bar baz burfl;foo,bar,,(baz,burfl)
+Ordered unflagged options, two (unflagged);ordered_unflagged;foo bar;foo,bar,()
+Ordered unflagged options, three (unflagged);ordered_unflagged;foo bar baz;foo,bar,(baz)
+Ordered unflagged options, four (unflagged);ordered_unflagged;foo bar baz burfl;foo,bar,(baz,burfl)
 # Ordered unflagged options should not drain the command line if they've already been assigned
-Ordered unflagged options, one flagged, one not;ordered_unflagged;-f foo bar baz;foo,baz,,(bar)
-Ordered unflagged options, one not, one flagged;ordered_unflagged;-s foo bar baz;bar,foo,,(baz)
+Ordered unflagged options, one flagged, one not;ordered_unflagged;-f foo bar baz;foo,baz,(bar)
+Ordered unflagged options, one not, one flagged;ordered_unflagged;-s foo bar baz;bar,foo,(baz)
 # Ordered unflagged options can be anywhere on the command line
-Ordered unflagged options interspersed with normal options, first pre;ordered_unflagged;-f bar foo baz;bar,baz,,(foo)
-Ordered unflagged options interspersed with normal options, first mid;ordered_unflagged;foo -f bar baz;bar,baz,,(foo)
-Ordered unflagged options interspersed with normal options, first post;ordered_unflagged;foo baz -f bar;bar,baz,,(foo)
-Ordered unflagged options interspersed with normal options, second pre;ordered_unflagged;-s foo bar baz;bar,foo,,(baz)
-Ordered unflagged options interspersed with normal options, second mid;ordered_unflagged;bar -s foo baz;bar,foo,,(baz)
-Ordered unflagged options interspersed with normal options, second post;ordered_unflagged;bar baz -s foo;bar,foo,,(baz)
+Ordered unflagged options interspersed with normal options, first pre;ordered_unflagged;-f bar foo baz;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, first mid;ordered_unflagged;foo -f bar baz;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, first post;ordered_unflagged;foo baz -f bar;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, second pre;ordered_unflagged;-s foo bar baz;bar,foo,(baz)
+Ordered unflagged options interspersed with normal options, second mid;ordered_unflagged;bar -s foo baz;bar,foo,(baz)
+Ordered unflagged options interspersed with normal options, second post;ordered_unflagged;bar baz -s foo;bar,foo,(baz)
+# Ordered unflagged last option
+Ordered unflagged (last) option, no options - error;ordered_unflagged_last;;Mandatory argument required for last command line parameter.
+Ordered unflagged (last) option, one (short);ordered_unflagged_last;-l last;last,()
+Ordered unflagged (last) option, one (long);ordered_unflagged_last;-last last;last,()
+Ordered unflagged (last) option, one (short double-dash);ordered_unflagged_last;--l last;last,()
+Ordered unflagged (last) option, one (long double-dash);ordered_unflagged_last;--last last;last,()
+Ordered unflagged (last) option, one (unflagged);ordered_unflagged_last;last;last,()
+# More arguments should only remove the last
+Ordered unflagged (last) option, two;ordered_unflagged_last;foo last;last,(foo)
+Ordered unflagged (last) option, three;ordered_unflagged_last;foo bar last;last,(foo,bar)
+Ordered unflagged (last) option, four;ordered_unflagged_last;foo bar baz last;last,(foo,bar,baz)
+# Last option should come from the argument in preference to the command line
+Ordered unflagged (last) option, two, flagged (pre);ordered_unflagged_last;-l foo last;foo,(last)
+Ordered unflagged (last) option, two, flagged (post);ordered_unflagged_last;last -l foo;foo,(last)
+Ordered unflagged (last) option, three, flagged (pre);ordered_unflagged_last;-l foo bar last;foo,(bar,last)
+Ordered unflagged (last) option, three, flagged (mid);ordered_unflagged_last;bar -l foo last;foo,(bar,last)
+Ordered unflagged (last) option, three, flagged (post);ordered_unflagged_last;bar last -l foo;foo,(bar,last)
 
