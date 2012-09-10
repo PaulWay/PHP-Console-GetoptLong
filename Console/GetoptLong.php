@@ -323,33 +323,35 @@ class Console_GetoptLong
     private function _setOrderedUnflaggedArgument(
         $pos, $optInfo, &$unprocessedArgs, $argDesc
     ) {
+        Console_GetoptLong::_debug(
+            " Checking that we have an argument in position $pos.\n"
+        );
         if (array_key_exists($pos-1, $unprocessedArgs)) {
             Console_GetoptLong::_debug(
-                " Yes - has it already been set?\n"
+                "  Yes has variable been set?\n"
             );
             if (array_key_exists(
                 $optInfo['descript'],
                 Console_GetoptLong::$_optionIsSet
             )) {
                 Console_GetoptLong::_debug(
-                    " It's already set - nothing to do\n"
+                    "  It's already set - nothing to do\n"
                 );
             } else {
                 // Set the variable - cheat on the name of the option
                 Console_GetoptLong::_setVariable(
-                    $optInfo,
-                    "command line parameter $pos",
+                    $optInfo, $argDesc,
                     $unprocessedArgs[$pos-1]
                 );
                 // Remove it from the unprocessed arguments list
                 Console_GetoptLong::_debug(
-                    " Removing argument $pos from remaining arguments.\n"
+                    "  Removing argument $pos from remaining arguments.\n"
                 );
                 array_splice($unprocessedArgs, $pos-1, 1);
             }
         } else {
             Console_GetoptLong::_debug(
-                " No - is it a mandatory argument and not already set?\n"
+                "  No - is it a mandatory argument and not already set?\n"
             );
             // We can assert that it has a type, since the initial
             // processing only allows mandatory and optional arguments
@@ -361,8 +363,7 @@ class Console_GetoptLong
                 )
             ) {
                 die(
-                    "Mandatory argument required in position"
-                    . " $pos on command line.\n"
+                    "Mandatory argument required for $argDesc.\n"
                 );
             }
             // else optional argument is blank - which is a valid
@@ -555,11 +556,9 @@ class Console_GetoptLong
             foreach (explode('|', $synonyms) as $synonym) {
 
                 // check for ordered unflagged synonym
-                if ((strlen($synonym) == 2 and substr($synonym, 0, 1) == '_'
-                    and substr($synonym, 1, 1) >= 1 and substr($synonym, 1, 1) <= 9)
-                    or (strlen($synonym == 3) and substr($synonym, 1, 2) == '-1')
-                ) {
-                    $position = substr($synonym, 1, 1);
+                preg_match('{_([1-9]|-1)}', $synonym, $matches);
+                if (! empty($matches)) {
+                    $position = $matches[1];
                     Console_GetoptLong::_debug(
                         " Putting ordered unflagged option for position $position\n"
                     );
@@ -849,7 +848,7 @@ class Console_GetoptLong
             $i++;
         }//end while
 
-        if (count($ordered_unflagged_args) > 0) {
+        if (! empty($ordered_unflagged_args)) {
             Console_GetoptLong::_debug(
                 "Before ordered unflagged processing, unprocessed arguments are ("
                 . implode(', ', $unprocessedArgs)
@@ -859,33 +858,29 @@ class Console_GetoptLong
             // Process ordered unflagged options from remaining command line
             Console_GetoptLong::_debug(
                 'Processing ' . count($ordered_unflagged_args)
-                . " ordered unflagged arguments.\n"
+                . " ordered unflagged arguments ("
+                . implode(':',array_keys($ordered_unflagged_args))
+                . ").\n"
             );
             // Do we have a '-1' ordered option - i.e. the last argument
             // on the command line?  If so, process it first and remove it
             // from the list of ordered unflagged arguments
             if (array_key_exists('-1', $ordered_unflagged_args)) {
-                Console_GetoptLong::_debug(
-                    " We have an argument in last position (-1).\n"
-                );
                 // Remember, position is a one-based array index - no decrement
+                $pos = count($unprocessedArgs);
                 Console_GetoptLong::_setOrderedUnflaggedArgument(
-                    count($ordered_unflagged_args),
-                    $ordered_unflagged_args['-1'],
-                    $unprocessedArgs,
-                    'last command line parameter'
+                    $pos, $ordered_unflagged_args['-1'],
+                    $unprocessedArgs, 'last command line parameter'
                 );
-                // Remove this option from the ordered unflagged options.
-                array_splice($unprocessedArgs, $pos, 1);
+                // Can't remove this option from the ordered unflagged options
+                // because array_splice mangles array indexes.  Ignore it later.
             }
             // Read arguments in order, starting from the back.  This may sound
             // strange, but means we can splice the elements out of the array
             // without disturbing the order, thus processing the array in one go.
             krsort($ordered_unflagged_args);
             foreach ($ordered_unflagged_args as $pos => $optInfo) {
-                Console_GetoptLong::_debug(
-                    " Checking that we have an argument in position $pos.\n"
-                );
+                if ($pos == "-1") { continue; }
                 // We've numbered from 1, but array keys are from zero
                 Console_GetoptLong::_setOrderedUnflaggedArgument(
                     $pos, $optInfo,
