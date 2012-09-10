@@ -163,6 +163,8 @@ class Console_GetoptLong
     private function _showHelp($argHelp)
     {
         echo "Usage: $_SERVER[PHP_SELF] options...\n";
+        // Add the actual help option to the help descriptions
+        $argHelp['help|h'] = Array('help' => "This help");
         ksort($argHelp);
         foreach ($argHelp as $synonyms => $help) {
             echo "  $synonyms : $help[help]\n";
@@ -859,7 +861,7 @@ class Console_GetoptLong
             Console_GetoptLong::_debug(
                 'Processing ' . count($ordered_unflagged_args)
                 . " ordered unflagged arguments ("
-                . implode(':',array_keys($ordered_unflagged_args))
+                . implode(':', array_keys($ordered_unflagged_args))
                 . ").\n"
             );
             // Do we have a '-1' ordered option - i.e. the last argument
@@ -880,7 +882,9 @@ class Console_GetoptLong
             // without disturbing the order, thus processing the array in one go.
             krsort($ordered_unflagged_args);
             foreach ($ordered_unflagged_args as $pos => $optInfo) {
-                if ($pos == "-1") { continue; }
+                if ($pos == "-1") {
+                    continue;
+                }
                 // We've numbered from 1, but array keys are from zero
                 Console_GetoptLong::_setOrderedUnflaggedArgument(
                     $pos, $optInfo,
