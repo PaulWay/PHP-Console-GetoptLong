@@ -7,6 +7,7 @@ $mandatory = '';
 $optional = '';
 $increment = 0;
 $negatable = 0;
+$non_help = 0;
 $args = Console_GetoptLong::getOptions(array(
 	'flag'		=> array(
 	    'var'   => &$flag,
@@ -28,6 +29,7 @@ $args = Console_GetoptLong::getOptions(array(
 	    'var'   => &$negatable,
 	    'help'  => "Negatable option",
 	),
+	'non-help'  => &$non_help,
 ));
 
 echo "$flag,$mandatory,$optional,$increment,$negatable,(", implode(',',$args), ")\n";
