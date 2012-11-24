@@ -207,6 +207,7 @@ Double increment (different names, double-dash);increment;--i --increment;2,()
 Double increment (different names, mixed-dash);increment;-i --increment;2,()
 Double increment (different names, other mixed-dash);increment;--i -increment;2,()
 Increment with finish options (increment preceding);increment;-i -- -i;1,(-i)
+Multiple increment as agglomerated options;increment;-iii;3,()
 
 # Help configuration
 Help text set, no options;help;;0,,,0,0,()

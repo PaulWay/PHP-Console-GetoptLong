@@ -307,6 +307,28 @@ class Console_GetoptLong
     }
 
     /**
+     * _incrementOption - Increment this option
+     *
+     * Takes an option and its information, and increments it.
+     * 
+     * @param array  $optInfo the option's pre-processed information.
+     * @param string $option  the option as supplied on the command line.
+     *
+     * @return none
+     */
+    private function _incrementOption($optInfo, $option)
+    {
+        $optInfo['var'] ++;
+        Console_GetoptLong::_debug(
+            "  it's an incrementing argument, setting its"
+            . " variable to $optInfo[var]\n"
+        );
+        Console_GetoptLong::$_optionIsSet[
+            $optInfo['descript']
+        ] = true;
+    }
+
+    /**
      * _setOrderedUnflaggedArgument - what it says on the tin.
      *
      * This is called in two places - one as the special case for the last
@@ -770,14 +792,9 @@ class Console_GetoptLong
                             }//end if
                         } else if ($opt === '+') {
                             // incrementing argument (then display it in debug)
-                            $var ++;
-                            Console_GetoptLong::_debug(
-                                "  it's an incrementing argument, setting its"
-                                . " variable to $var\n"
+                            Console_GetoptLong::_incrementOption(
+                                $optInfo, $option
                             );
-                            Console_GetoptLong::$_optionIsSet[
-                                $optInfo['descript']
-                            ] = true;
                         } else if ($opt === '!') {
                             // a negatable argument - check if we've been
                             // given the no variant and set accordingly.
@@ -823,11 +840,20 @@ class Console_GetoptLong
                         $letter = substr($option, $i, 1);
                         // pretend that we were given the -$letter option; these
                         // can only be flags at the moment so just set them to 1.
-                        Console_GetoptLong::_debug(
-                            "  setting flag for de-agglomerated $letter\n"
-                        );
-                        $var = &$arg_lookup[$letter]['var'];
-                        $var = 1;
+                        // Is this an incrementing option?
+                        if (array_key_exists('opt', $arg_lookup[$letter])
+                            and $arg_lookup[$letter]['opt'] === '+'
+                        ) {
+                            // incrementing argument (then display it in debug)
+                            Console_GetoptLong::_incrementOption(
+                                $arg_lookup[$letter], $letter
+                            );
+                        } else {
+                            Console_GetoptLong::_debug(
+                                "  setting flag for de-agglomerated $letter\n"
+                            );
+                            $arg_lookup[$letter]['var'] = 1;
+                        }
                     }
                 } else {
                     // Not a recognised argument argument: what do we do with it?
