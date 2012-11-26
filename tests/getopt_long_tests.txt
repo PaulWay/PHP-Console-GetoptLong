@@ -85,19 +85,19 @@ Mandatory arg integer normal;mandatory_integer;-m 1;1,()
 Mandatory arg integer largish;mandatory_integer;-m 16777216;16777216,()
 Mandatory arg integer huge;mandatory_integer;-m 123456789012345678901234567890;123456789012345678901234567890,()
 Mandatory arg integer negative;mandatory_integer;-m -1;-1,()
-Mandatory arg error on string;mandatory_integer;-m foo;-m argument requires an integer
-Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument requires an integer
+Mandatory arg error on string;mandatory_integer;-m foo;-m argument must be an integer
+Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument must be an integer
 Mandatory arg integer from equals (short);mandatory_integer;-m=27;27,()
 Mandatory arg integer from equals (long);mandatory_integer;-mandatory=27;27,()
 Mandatory arg integer from equals (short double-dash);mandatory_integer;--m=27;27,()
 Mandatory arg integer from equals (long double-dash);mandatory_integer;--mandatory=27;27,()
 Mandatory arg integer from equals negative;mandatory_integer;-m=-43;-43,()
-Mandatory arg integer from equals error on string;mandatory_integer;-m=foo;-m argument requires an integer
-Mandatory arg integer from equals error on float;mandatory_integer;-m=-2.71828;-m argument requires an integer
+Mandatory arg integer from equals error on string;mandatory_integer;-m=foo;-m argument must be an integer
+Mandatory arg integer from equals error on float;mandatory_integer;-m=-2.71828;-m argument must be an integer
 
 # Mandatory arguments (integer) in single-character-option-and-argument format
 Mandatory arg integer in option-and-argument format;mandatory_integer;-m345;345,()
-Mandatory arg integer in option-and-argument format error on string;mandatory_integer;-mfoo;-m argument requires an integer
+Mandatory arg integer in option-and-argument format error on string;mandatory_integer;-mfoo;-m argument must be an integer
 
 # Mandatory arguments into an array - explicit @ declaration in GetOptions
 Mandatory arg array explicit (no argument);mandatory_array_explicit;;,()
@@ -159,8 +159,8 @@ Optional arg from equals - zero-length string;optional_single;-o=;,()
 Optional arg integer (no arguments);optional_integer;;,()
 Optional arg integer normal;optional_integer;-o 1;1,()
 Optional arg integer largish;optional_integer;-o 16777216;16777216,()
-Optional arg error on string;optional_integer;-o foo;-o argument requires an integer
-Optional arg error on float;optional_integer;-o 3.14;-o argument requires an integer
+Optional arg error on string;optional_integer;-o foo;-o argument must be an integer
+Optional arg error on float;optional_integer;-o 3.14;-o argument must be an integer
 
 # Optional arguments into an array - explicit @ declaration in GetOptions
 Optional arg array explicit (no argument);optional_array_explicit;;,()

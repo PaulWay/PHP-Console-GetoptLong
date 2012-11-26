@@ -258,7 +258,7 @@ class Console_GetoptLong
             and ! Console_GetoptLong::_checkType($argument, $optInfo['type'])
         ) {
             die(
-                "$option argument requires "
+                "$option argument must be "
                 . Console_GetoptLong::$_typeLookup[
                     $optInfo['type']
                 ] . "\n"
