@@ -67,7 +67,7 @@ Mandatory arg (long double-dash);mandatory_single;--mandatory file;file,()
 Mandatory arg with arg before;mandatory_single;foo -m file;file,(foo)
 Mandatory arg with arg after;mandatory_single;-m file foo;file,(foo)
 Mandatory arg twice (latter value);mandatory_single;-m file1 -m file2;file2,()
-Mandatory arg error if not supplied;mandatory_single;-m;Argument -m missing its parameter
+Mandatory arg error if not supplied;mandatory_single;-m;Option -m missing its argument
 Mandatory arg will absorb flag;mandatory_single;-m -f;-f,()
 Mandatory arg with finish options (mandatory preceding);mandatory_single;-m file -- -i;file,(-i)
 Mandatory arg from equals (short);mandatory_single;-m=file;file,()

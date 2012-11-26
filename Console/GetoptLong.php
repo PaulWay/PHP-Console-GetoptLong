@@ -743,7 +743,7 @@ class Console_GetoptLong
                                 // Is there still command line left?
                                 if ($i >= $numArgs) {
                                     // No: fail.
-                                    die("Argument $arg missing its parameter\n");
+                                    die("Option $arg missing its argument\n");
                                 }//end if
                                 Console_GetoptLong::_setVariable(
                                     $optInfo, $arg, $args[$i]
