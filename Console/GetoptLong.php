@@ -472,7 +472,12 @@ class Console_GetoptLong
      * options are processed, if any such synonyms are found, they will be
      * taken from the related place in the array, numbered from 1.  Places
      * not numbered are ignored - so if you have _1, _2 and _4, the third
-     * argument will be left in the argument list to be passed back.
+     * argument will be left in the argument list to be passed back.  The
+     * special position '-1' (i.e. synonym '_-1') indicates the last
+     * argument on the command line; this will be taken before any other
+     * ordered unflagged arguments are read.  An option that has already
+     * been set by an explicit flag will not be changed as a result of this
+     * processing.
      *
      * @return array the remaining list of command line parameters that
      * weren't options or their arguments.  These can occur anywhere in the
