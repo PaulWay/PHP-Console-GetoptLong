@@ -57,6 +57,7 @@ Negatable with arg before;negatable;foo -f;1,(foo)
 Negatable with arg after;negatable;-f foo;1,(foo)
 Negatable (negated) with arg before;negatable;foo -nof;0,(foo)
 Negatable (negated) with arg after;negatable;-nof foo;0,(foo)
+Negatable multiple with agglomeration (ignored);negatable;-fff;1,()
 
 # Mandatory arguments (string)
 Mandatory (no argument);mandatory_single;;,()
