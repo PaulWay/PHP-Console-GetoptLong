@@ -50,14 +50,14 @@ warnings!        = takes --warnings and --nowarnings
 So we might ask for those arguments to be processed from the command line with
 the following invocation:
 
-$args = Console_GetoptLong::getOptions(
+$args = Console_GetoptLong::getOptions(array(
     'quiet|q'       => &$quiet,
     'verbose|v+'    => &$verbose,
     'input|i=s@'    => &$inputs,
     'output|o=s'    => &$output,
     'debug|d+'      => &$debug,
     'warnings!'     => &$warnings,
-);
+));
 
 Argument descriptions can be in any order (naturally).  Each option
 can have one or more synonyms, or none.  Both single dash (-) and
@@ -75,7 +75,7 @@ Showing help
 There is an alternate way of specifying options which includes the ability to
 include help text describing each option:
 
-$args = Console_GetoptLong::getOptions(
+$args = Console_GetoptLong::getOptions(array(
     'quiet|q'       => array(
         'var'   => &$quiet,
         'help'  => 'Do not show progress'
@@ -100,7 +100,7 @@ $args = Console_GetoptLong::getOptions(
         'var'   => &$warnings,
         'help'  => 'Warn on processing glitches'
     ),
-);
+));
 
 If any option has this format, it will be treated as if there is an invisible
 extra description:
