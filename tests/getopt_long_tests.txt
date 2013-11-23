@@ -1,0 +1,343 @@
+# Argument description parsing
+Missing trailing synonym;setup;foo|;Do not recognise description 'foo|'
+Missing second trailing synonym;setup;foo|bar|;Do not recognise description 'foo|bar|'
+Missing starting synonym;setup;|foo;Do not recognise description '|foo'
+Missing second starting synonym;setup;|foo|bar;Do not recognise description '|foo|bar'
+Missing middle synonym;setup;foo||bar;Do not recognise description 'foo||bar'
+Missing mandatory type specifier;setup;foo=;Do not recognise description 'foo='
+Missing optional type specifier;setup;foo:;Do not recognise description 'foo:'
+Doubled mandatory type specifier;setup;foo==;Do not recognise description 'foo=='
+Doubled optional type specifier;setup;foo::;Do not recognise description 'foo::'
+Invalid type specifier;setup;foo=q;Do not recognise description 'foo=q'
+Mixed standard and increment specifier;setup;foo=i+;Do not recognise description 'foo=i+'
+Mixed standard and negation specifier;setup;foo=i!;Do not recognise description 'foo=i!'
+Mixed increment and negation specifier;setup;foo!+;Do not recognise description 'foo!+'
+Extra suffix on type specifier;setup;foo=ss;Do not recognise description 'foo=ss'
+Extra suffix on increment specifier;setup;foo++;Do not recognise description 'foo++'
+Equal descriptions are smashed together in array;setup;foo foo;OK
+Warning about duplicate synonyms - A in B first;setup;foo|foobar foo;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - A in B last;setup;foobar|foo foo;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - B in A first;setup;foo foo|foobar;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - B in A last;setup;foo foobar|foo;Warning: synonym foo declared twice - ignoring.\nOK
+Warning about duplicate synonyms - short;setup;foo|f file|f;Warning: synonym f declared twice - ignoring.\nOK
+Warning about duplicate synonyms - one negated, the other not;setup;notice tice!;Warning: synonym notice declared twice - ignoring.\nOK
+Options with dashes in them are OK;setup;foo-bar-baz;OK
+Ordered unflagged option must take an argument (flag);setup;foo|_1;Ordered unflagged option 1 in 'foo|_1' must take an argument.
+Ordered unflagged option must take an argument (increment);setup;foo|_1+;Ordered unflagged option 1 in 'foo|_1' must take an argument.
+Ordered unflagged option must take an argument (negatable);setup;foo|_1!;Ordered unflagged option 1 in 'foo|_1' must take an argument.
+
+# No arguments
+No arguments;noargs;;()
+Non-option argument;noargs;foo;(foo)
+Option argument;noargs;-foo;(-foo)
+
+# Flag argument
+Verbose (no argument);flag;;0,()
+Verbose (short);flag;-v;1,()
+Verbose (long);flag;-verbose;1,()
+Verbose (short double-dash);flag;--v;1,()
+Verbose (long double-dash);flag;--verbose;1,()
+Verbose with arg before;flag;foo -v;1,(foo)
+Verbose with arg before;flag;-v foo;1,(foo)
+Verbose twice (just set);flag;-v -v;1,()
+Verbose with finish options (none preceding);flag;-- -v;0,(-v)
+Verbose with finish options (flag preceding);flag;-v -- -v;1,(-v)
+
+# Negatable flag argument
+Negatable (none);negatable;;ok,()
+Negatable (short);negatable;-f;1,()
+Negatable (long);negatable;-flag;1,()
+Negatable (short double-dash);negatable;--f;1,()
+Negatable (long double-dash);negatable;--flag;1,()
+Negatable negated (short);negatable;-nof;0,()
+Negatable negated (long);negatable;-noflag;0,()
+Negatable negated (short double-dash);negatable;--nof;0,()
+Negatable negated (long double-dash);negatable;--noflag;0,()
+Negatable with arg before;negatable;foo -f;1,(foo)
+Negatable with arg after;negatable;-f foo;1,(foo)
+Negatable (negated) with arg before;negatable;foo -nof;0,(foo)
+Negatable (negated) with arg after;negatable;-nof foo;0,(foo)
+Negatable multiple with agglomeration (ignored);negatable;-fff;1,()
+
+# Mandatory arguments (string)
+Mandatory (no argument);mandatory_single;;,()
+Mandatory arg (short);mandatory_single;-m file;file,()
+Mandatory arg (long);mandatory_single;-mandatory file;file,()
+Mandatory arg (short double-dash);mandatory_single;--m file;file,()
+Mandatory arg (long double-dash);mandatory_single;--mandatory file;file,()
+Mandatory arg with arg before;mandatory_single;foo -m file;file,(foo)
+Mandatory arg with arg after;mandatory_single;-m file foo;file,(foo)
+Mandatory arg twice (latter value);mandatory_single;-m file1 -m file2;file2,()
+Mandatory arg error if not supplied;mandatory_single;-m;Option -m missing its argument
+Mandatory arg will absorb flag;mandatory_single;-m -f;-f,()
+Mandatory arg with finish options (mandatory preceding);mandatory_single;-m file -- -i;file,(-i)
+Mandatory arg from equals (short);mandatory_single;-m=file;file,()
+Mandatory arg from equals (long);mandatory_single;-mandatory=file;file,()
+Mandatory arg from equals (short double-dash);mandatory_single;--m=file;file,()
+Mandatory arg from equals (long double-dash);mandatory_single;--mandatory=file;file,()
+Mandatory arg from equals - zero-length string;mandatory_single;-m=;,()
+
+# Mandatory arguments in single-character-option-and-argument format
+Mandatory arg in option-and-argument format;mandatory_single;-mfoo;foo,()
+
+# Mandatory arguments (integer)
+Mandatory arg integer (no argument);mandatory_integer;;,()
+Mandatory arg integer normal;mandatory_integer;-m 1;1,()
+Mandatory arg integer largish;mandatory_integer;-m 16777216;16777216,()
+Mandatory arg integer huge;mandatory_integer;-m 123456789012345678901234567890;123456789012345678901234567890,()
+Mandatory arg integer negative;mandatory_integer;-m -1;-1,()
+Mandatory arg error on string;mandatory_integer;-m foo;-m argument must be an integer
+Mandatory arg error on float;mandatory_integer;-m 3.14;-m argument must be an integer
+Mandatory arg integer from equals (short);mandatory_integer;-m=27;27,()
+Mandatory arg integer from equals (long);mandatory_integer;-mandatory=27;27,()
+Mandatory arg integer from equals (short double-dash);mandatory_integer;--m=27;27,()
+Mandatory arg integer from equals (long double-dash);mandatory_integer;--mandatory=27;27,()
+Mandatory arg integer from equals negative;mandatory_integer;-m=-43;-43,()
+Mandatory arg integer from equals error on string;mandatory_integer;-m=foo;-m argument must be an integer
+Mandatory arg integer from equals error on float;mandatory_integer;-m=-2.71828;-m argument must be an integer
+
+# Mandatory arguments (integer) in single-character-option-and-argument format
+Mandatory arg integer in option-and-argument format;mandatory_integer;-m345;345,()
+Mandatory arg integer in option-and-argument format error on string;mandatory_integer;-mfoo;-m argument must be an integer
+
+# Mandatory arguments into an array - explicit @ declaration in GetOptions
+Mandatory arg array explicit (no argument);mandatory_array_explicit;;,()
+Mandatory arg array explicit (short);mandatory_array_explicit;-m file1 -m file2;(file1,file2),()
+Mandatory arg array explicit (long);mandatory_array_explicit;-mandatory file1 -mandatory file2;(file1,file2),()
+Mandatory arg array explicit (short double-dash);mandatory_array_explicit;--m file1 --m file2;(file1,file2),()
+Mandatory arg array explicit (long double-dash);mandatory_array_explicit;--mandatory file1 --mandatory file2;(file1,file2),()
+Mandatory arg array explicit (mixed);mandatory_array_explicit;-m file1 -mandatory file2 --mandatory file3;(file1,file2,file3),()
+Mandatory arg array explicit with extra before;mandatory_array_explicit;foo -m file1 -m file2;(file1,file2),(foo)
+Mandatory arg array explicit with extra during;mandatory_array_explicit;-m file1 foo -m file2;(file1,file2),(foo)
+Mandatory arg array explicit with extra after;mandatory_array_explicit;-m file1 -m file2 foo;(file1,file2),(foo)
+Mandatory arg array explicit from equals;mandatory_array_explicit;-m=file1 -m=file2;(file1,file2),()
+Mandatory arg array explicit from equals mixed;mandatory_array_explicit;-m=file1 -mandatory file2;(file1,file2),()
+
+# Mandatory arguments in single-character-option-and-argument format
+Mandatory arg array explicit single letter plus value one argument;mandatory_array_explicit;-mfoo;(foo),()
+Mandatory arg array explicit single letter plus value multiple arguments;mandatory_array_explicit;-mfoo -mbar;(foo,bar),()
+
+# Mandatory arguments into an array - implicit via passing an array reference
+Mandatory arg array implicit (short);mandatory_array_implicit;-m file1 -m file2;(file1,file2),()
+Mandatory arg array implicit (long);mandatory_array_implicit;-mandatory file1 -mandatory file2;(file1,file2),()
+Mandatory arg array implicit (short double-dash);mandatory_array_implicit;--m file1 --m file2;(file1,file2),()
+Mandatory arg array implicit (long double-dash);mandatory_array_implicit;--mandatory file1 --mandatory file2;(file1,file2),()
+Mandatory arg array implicit (mixed);mandatory_array_implicit;-m file1 -mandatory file2 --mandatory file3;(file1,file2,file3),()
+Mandatory arg array implicit with extra before;mandatory_array_implicit;foo -m file1 -m file2;(file1,file2),(foo)
+Mandatory arg array implicit with extra during;mandatory_array_implicit;-m file1 foo -m file2;(file1,file2),(foo)
+Mandatory arg array implicit with extra after;mandatory_array_implicit;-m file1 -m file2 foo;(file1,file2),(foo)
+Mandatory arg array implicit from equals;mandatory_array_implicit;-m=file1 -m=file2;(file1,file2),()
+Mandatory arg array implicit from equals mixed;mandatory_array_implicit;-m=file1 --mandatory file2;(file1,file2),()
+
+# Mandatory arguments in single-character-option-and-argument format
+Mandatory arg array implicit single letter plus value one argument;mandatory_array_implicit;-mfoo;(foo),()
+Mandatory arg array implicit single letter plus value multiple arguments;mandatory_array_implicit;-mfoo -mbar;(foo,bar),()
+
+# Optional arguments
+Optional arg (no arguments);optional_single;;,()
+Optional arg (missing) (short);optional_single;-o;1,()
+Optional arg (missing) (long);optional_single;-optional;1,()
+Optional arg (missing) (short double-dash);optional_single;--o;1,()
+Optional arg (missing) (long double-dash);optional_single;--optional;1,()
+Optional arg (missing) with arg before;optional_single;foo -o;1,(foo)
+Optional arg (missing) with option after;optional_single;-o -v;1,(-v)
+Optional arg (missing) twice (just set);optional_single;-o -o;1,()
+Optional arg (present) (short);optional_single;-o 3;3,()
+Optional arg (present) (long);optional_single;-optional 3;3,()
+Optional arg (present) (short double-dash);optional_single;--o 3;3,()
+Optional arg (present) (long double-dash);optional_single;--optional 3;3,()
+Optional arg (present) with arg before;optional_single;foo -o 3;3,(foo)
+Optional arg (present) with arg after;optional_single;-o 3 foo;3,(foo)
+Optional arg (present) twice (latter value);optional_single;-o foo -o bar;bar,()
+Optional arg with finish options (optional non-supplied preceding);optional_single;-o -- -i;1,(-i)
+Optional arg with finish options (optional supplied preceding);optional_single;-o opt -- -i;opt,(-i)
+Optional arg from equals (short);optional_single;-o=file;file,()
+Optional arg from equals (long);optional_single;-optional=file;file,()
+Optional arg from equals (long double-dash);optional_single;--optional=file;file,()
+Optional arg from equals - zero-length string;optional_single;-o=;,()
+
+# Optional arguments (integer)
+Optional arg integer (no arguments);optional_integer;;,()
+Optional arg integer normal;optional_integer;-o 1;1,()
+Optional arg integer largish;optional_integer;-o 16777216;16777216,()
+Optional arg error on string;optional_integer;-o foo;-o argument must be an integer
+Optional arg error on float;optional_integer;-o 3.14;-o argument must be an integer
+
+# Optional arguments into an array - explicit @ declaration in GetOptions
+Optional arg array explicit (no argument);optional_array_explicit;;,()
+Optional arg array explicit (short);optional_array_explicit;-o file1 -o file2;(file1,file2),()
+Optional arg array explicit (long);optional_array_explicit;-optional file1 -optional file2;(file1,file2),()
+Optional arg array explicit (short double-dash);optional_array_explicit;--o file1 --o file2;(file1,file2),()
+Optional arg array explicit (long double-dash);optional_array_explicit;--optional file1 --optional file2;(file1,file2),()
+Optional arg array explicit (mixed);optional_array_explicit;-o file1 -optional file2 --optional file3;(file1,file2,file3),()
+Optional arg array explicit with extra before;optional_array_explicit;foo -o file1 -o file2;(file1,file2),(foo)
+Optional arg array explicit with extra during;optional_array_explicit;-o file1 foo -o file2;(file1,file2),(foo)
+Optional arg array explicit with extra after;optional_array_explicit;-o file1 -o file2 foo;(file1,file2),(foo)
+Optional arg array explicit from equals;optional_array_explicit;-o=file1 -o=file2;(file1,file2),()
+Optional arg array explicit from equals mixed;optional_array_explicit;-o=file1 --optional file2;(file1,file2),()
+Optional arg array explicit with no arguments;optional_array_explicit;-o -o;(1,1),()
+Optional arg array explicit with some arguments (missing first);optional_array_explicit;-o -o 2;(1,2),()
+Optional arg array explicit with some arguments (missing last);optional_array_explicit;-o 2 -o;(2,1),()
+
+# Optional arguments into an array - implicit via passing an array reference
+Optional arg array implicit (short);optional_array_implicit;-o file1 -o file2;(file1,file2),()
+Optional arg array implicit (long);optional_array_implicit;-optional file1 -optional file2;(file1,file2),()
+Optional arg array implicit (short double-dash);optional_array_implicit;--o file1 --o file2;(file1,file2),()
+Optional arg array implicit (long double-dash);optional_array_implicit;--optional file1 --optional file2;(file1,file2),()
+Optional arg array implicit (mixed);optional_array_implicit;-o file1 -optional file2 --optional file3;(file1,file2,file3),()
+Optional arg array implicit with extra before;optional_array_implicit;foo -o file1 -o file2;(file1,file2),(foo)
+Optional arg array implicit with extra during;optional_array_implicit;-o file1 foo -o file2;(file1,file2),(foo)
+Optional arg array implicit with extra after;optional_array_implicit;-o file1 -o file2 foo;(file1,file2),(foo)
+Optional arg array implicit from equals;optional_array_explicit;-o=file1 -o=file2;(file1,file2),()
+Optional arg array implicit from equals mixed;optional_array_explicit;-o=file1 -optional file2;(file1,file2),()
+Optional arg array implicit with no arguments;optional_array_explicit;-o -o;(1,1),()
+Optional arg array implicit with some arguments (missing first);optional_array_explicit;-o -o 2;(1,2),()
+Optional arg array implicit with some arguments (missing last);optional_array_explicit;-o 2 -o;(2,1),()
+
+# Incremented arguments
+Increment (no arguments);increment;;0,()
+Increment (short);increment;-i;1,()
+Increment (long);increment;-increment;1,()
+Increment (short double-dash);increment;--i;1,()
+Increment (long double-dash);increment;--increment;1,()
+Increment with arg before;increment;foo -i;1,(foo)
+Increment with arg after;increment;-i foo;1,(foo)
+Double increment;increment;-i -i;2,()
+Double increment (different names);increment;-i -increment;2,()
+Double increment (different names, double-dash);increment;--i --increment;2,()
+Double increment (different names, mixed-dash);increment;-i --increment;2,()
+Double increment (different names, other mixed-dash);increment;--i -increment;2,()
+Increment with finish options (increment preceding);increment;-i -- -i;1,(-i)
+Multiple increment as agglomerated options;increment;-iii;3,()
+
+# Help configuration
+Help text set, no options;help;;0,,,0,0,()
+Help text set, flag;help;--flag;1,,,0,0,()
+Help text set, mandatory;help;--mandatory 42;0,42,,0,0,()
+Help text set, optional (missing);help;--optional;0,,1,0,0,()
+Help text set, optional (present);help;--optional;0,,1,0,0,()
+Help text set, increment;help;--increment;0,,,1,0,()
+Help text set, negatable;help;--negatable;0,,,0,1,()
+Help text set, help option (short) alone;help;-h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option (long single) alone;help;-help;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option (long double) alone;help;--help;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+# help should always be printed even if other things are on the command line
+Help text set, help option with flag after;help;-h --flag;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with flag before;help;--flag -h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with mandatory after;help;-h --mandatory 3;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with mandatory before;help;--mandatory 3 -h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (missing) after;help;-h -optional;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (missing) before;help;--optional -h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (present) after;help;-h -o 3;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with optional (present) before;help;--optional 3 -h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with increment after;help;-h -i;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with increment before;help;--increment -h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with negatable after;help;-h --negatable;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+Help text set, help option with negatable before;help;-n -h;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+# but help should only be recognised before a stop-options double dash
+Help text set, help option with stop options before;help;-- -h;0,,,0,0,(-h)
+Help text set, help option with stop options after;help;-h --;Usage: test_help.php options...\n  flag : Flag option\n  help|h : This help\n  increment|i : Incrementing option\n  mandatory|m : Mandatory option\n  negatable|n : Negatable option\n  optional|o : Optional option
+# And help shouldn't be supplied if we ask to deal with the help option ourselves.
+Help text set, help option manually set, no options, should warn and not generate help;help_own;;Warning: option 'help' already supplied, ignoring help supplied in targets\nOK(help=0)
+Help text set, help option manually set, other option given, should warn and not generate help;help_own;-foo;Warning: option 'help' already supplied, ignoring help supplied in targets\nOK(help=0)
+Help text set, help option manually set, help option given, should warn and not generate help;help_own;-help;Warning: option 'help' already supplied, ignoring help supplied in targets\nOK(help=1)
+# We need to test that help isn't generated even if the -help flag is supplied and help hasn't been supplied by the caller
+Help text not generated by a script that doesn't supply it;flag;-help;0,(-help)
+
+# Different ways of dealing with 'not a recognised option'
+# The above all tests the standard way, which is 'arg', or give it back in the arguments.
+# 'warn' should warn the user and discard the option but still produce a valid output
+Warn on unrecognised option, no options;unknown_option_handling;warn;,(warn)
+Warn on unrecognised option, non-option;unknown_option_handling;warn knee;,(warn,knee)
+Warn on unrecognised option, recognised short option;unknown_option_handling;warn -m foo;foo,(warn)
+Warn on unrecognised option, recognised long option;unknown_option_handling;warn --mandatory foo;foo,(warn)
+Warn on unrecognised option, unrecognised short option;unknown_option_handling;warn -foo;Warning: unrecognised option -foo\n,(warn)
+Warn on unrecognised option, unrecognised long option;unknown_option_handling;warn --foo;Warning: unrecognised option --foo\n,(warn)
+Warn on unrecognised option, both types, short;unknown_option_handling;warn -m foo -b;Warning: unrecognised option -b\nfoo,(warn)
+Warn on unrecognised option, both types, long;unknown_option_handling;warn -mandatory foo --bar;Warning: unrecognised option --bar\nfoo,(warn)
+Warn on unrecognised option, both types, mixed;unknown_option_handling;warn -m foo -bar;Warning: unrecognised option -bar\nfoo,(warn)
+# 'die' should die before the option is passed back to the caller
+Die on unrecognised option, no options;unknown_option_handling;die;,(die)
+Die on unrecognised option, non-option;unknown_option_handling;die bracket;,(die,bracket)
+Die on unrecognised option, recognised short option;unknown_option_handling;die -m foo;foo,(die)
+Die on unrecognised option, recognised long option;unknown_option_handling;die -mandatory foo;foo,(die)
+Die on unrecognised option, unrecognised short option;unknown_option_handling;die -f foo;Error: unrecognised option -f
+Die on unrecognised option, unrecognised long option;unknown_option_handling;die -foo foo;Error: unrecognised option -foo
+Die on unrecognised option, both types, short;unknown_option_handling;die -m foo -b;Error: unrecognised option -b
+Die on unrecognised option, both types, long;unknown_option_handling;die --mandatory foo --bar;Error: unrecognised option --bar
+Die on unrecognised option, both types, mixed;unknown_option_handling;die --bar -m foo;Error: unrecognised option --bar
+# 'ignore' will discard the unrecognised option
+Ignore unrecognised option, no options;unknown_option_handling;ignore;,(ignore)
+Ignore unrecognised option, non-option;unknown_option_handling;ignore blart;,(ignore,blart)
+Ignore unrecognised option, recognised short option;unknown_option_handling;ignore -m foo;foo,(ignore)
+Ignore unrecognised option, recognised long option;unknown_option_handling;ignore -mandatory foo;foo,(ignore)
+Ignore unrecognised option, unrecognised short option;unknown_option_handling;ignore -f foo;,(ignore,foo)
+Ignore unrecognised option, unrecognised long option;unknown_option_handling;ignore -foo foo;,(ignore,foo)
+Ignore unrecognised option, both types, short;unknown_option_handling;ignore -m foo -b;foo,(ignore)
+Ignore unrecognised option, both types, long;unknown_option_handling;ignore --mandatory foo --bar;foo,(ignore)
+Ignore unrecognised option, both types, mixed;unknown_option_handling;ignore --bar -m foo;foo,(ignore)
+
+# Accept argument list from caller
+
+# Allow multiple-single-letter option agglomeration
+Multiple single letter agglomeration, single 1;single_agglom;-a;1,0,0,()
+Multiple single letter agglomeration, single 2;single_agglom;-b;0,1,0,()
+Multiple single letter agglomeration, single 3;single_agglom;-c;0,0,1,()
+Multiple single letter agglomeration, double 1 2;single_agglom;-ab;1,1,0,()
+Multiple single letter agglomeration, double 1 3;single_agglom;-ac;1,0,1,()
+Multiple single letter agglomeration, double 2 3;single_agglom;-bc;0,1,1,()
+Multiple single letter agglomeration, all three, perm 1;single_agglom;-abc;1,1,1,()
+Multiple single letter agglomeration, all three, perm 2;single_agglom;-bca;1,1,1,()
+Multiple single letter agglomeration, all three, perm 2;single_agglom;-cba;1,1,1,()
+Multiple single letter agglomeration, extra letter at start: new option;single_agglom;-dab;0,0,0,(-dab)
+Multiple single letter agglomeration, extra letter in middle: new option;single_agglom;-adb;0,0,0,(-adb)
+Multiple single letter agglomeration, extra letter at end: new option;single_agglom;-abd;0,0,0,(-abd)
+
+# Ordered unflagged options - in other words, allowing the caller to pick
+# values up from the non-flagged options in the command line in order.
+# First argument is mandatory, second is optional.
+# No arguments should warn on missing first argument only
+Ordered unflagged options, no options - error;ordered_unflagged;;Mandatory argument required for command line parameter 1.
+# Only first argument set in various ways
+Ordered unflagged options, one (short);ordered_unflagged;-f foo;foo,,()
+Ordered unflagged options, one (long);ordered_unflagged;-first foo;foo,,()
+Ordered unflagged options, one (short double-dash);ordered_unflagged;--f foo;foo,,()
+Ordered unflagged options, one (long double-dash);ordered_unflagged;--first foo;foo,,()
+Ordered unflagged options, one (unflagged);ordered_unflagged;foo;foo,,()
+# Only second argument set in various ways - mandatory first argument
+Ordered unflagged options, one (short) - error;ordered_unflagged;-s bar;Mandatory argument required for command line parameter 1.
+Ordered unflagged options, one (long) - error;ordered_unflagged;-second bar;Mandatory argument required for command line parameter 1.
+Ordered unflagged options, one (short double-dash) - error;ordered_unflagged;--s bar;Mandatory argument required for command line parameter 1.
+Ordered unflagged options, one (long double-dash) - error;ordered_unflagged;--second bar;Mandatory argument required for command line parameter 1.
+# More arguments should fill the second option and the returned args list
+Ordered unflagged options, two (unflagged);ordered_unflagged;foo bar;foo,bar,()
+Ordered unflagged options, three (unflagged);ordered_unflagged;foo bar baz;foo,bar,(baz)
+Ordered unflagged options, four (unflagged);ordered_unflagged;foo bar baz burfl;foo,bar,(baz,burfl)
+# Ordered unflagged options should not drain the command line if they've already been assigned
+Ordered unflagged options, one flagged, one not;ordered_unflagged;-f foo bar baz;foo,baz,(bar)
+Ordered unflagged options, one not, one flagged;ordered_unflagged;-s foo bar baz;bar,foo,(baz)
+# Ordered unflagged options can be anywhere on the command line
+Ordered unflagged options interspersed with normal options, first pre;ordered_unflagged;-f bar foo baz;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, first mid;ordered_unflagged;foo -f bar baz;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, first post;ordered_unflagged;foo baz -f bar;bar,baz,(foo)
+Ordered unflagged options interspersed with normal options, second pre;ordered_unflagged;-s foo bar baz;bar,foo,(baz)
+Ordered unflagged options interspersed with normal options, second mid;ordered_unflagged;bar -s foo baz;bar,foo,(baz)
+Ordered unflagged options interspersed with normal options, second post;ordered_unflagged;bar baz -s foo;bar,foo,(baz)
+# Ordered unflagged last option
+Ordered unflagged (last) option, no options - error;ordered_unflagged_last;;Mandatory argument required for last command line parameter.
+Ordered unflagged (last) option, one (short);ordered_unflagged_last;-l last;last,()
+Ordered unflagged (last) option, one (long);ordered_unflagged_last;-last last;last,()
+Ordered unflagged (last) option, one (short double-dash);ordered_unflagged_last;--l last;last,()
+Ordered unflagged (last) option, one (long double-dash);ordered_unflagged_last;--last last;last,()
+Ordered unflagged (last) option, one (unflagged);ordered_unflagged_last;last;last,()
+# More arguments should only remove the last
+Ordered unflagged (last) option, two;ordered_unflagged_last;foo last;last,(foo)
+Ordered unflagged (last) option, three;ordered_unflagged_last;foo bar last;last,(foo,bar)
+Ordered unflagged (last) option, four;ordered_unflagged_last;foo bar baz last;last,(foo,bar,baz)
+# Last option should come from the argument in preference to the command line
+Ordered unflagged (last) option, two, flagged (pre);ordered_unflagged_last;-l foo last;foo,(last)
+Ordered unflagged (last) option, two, flagged (post);ordered_unflagged_last;last -l foo;foo,(last)
+Ordered unflagged (last) option, three, flagged (pre);ordered_unflagged_last;-l foo bar last;foo,(bar,last)
+Ordered unflagged (last) option, three, flagged (mid);ordered_unflagged_last;bar -l foo last;foo,(bar,last)
+Ordered unflagged (last) option, three, flagged (post);ordered_unflagged_last;bar last -l foo;foo,(bar,last)
+

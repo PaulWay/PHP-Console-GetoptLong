@@ -1,0 +1,132 @@
+Console_GetoptLong
+==================
+
+Console_GetoptLong is a module for reading command line options.
+
+It differs from all other PHP command line option reading modules in several
+important ways:
+
+ * it puts the results directly into referenced variables
+ * it has a simple description to variable mapping
+ * it deals with multiple synonyms per option, short and long
+ * a wide variety of argument types can be automatically checked
+ * it returns a list of all the arguments that weren't options
+
+It also adds a large number of ways to process command-line arguments so that
+you the caller can reduce the amount of 'boiler-plate' code you have to write.
+However, it's also designed to be relatively simple for simple uses, so that
+simple code remains simple.
+
+Argument descriptions
+=====================
+
+getOptions is the main function provided by Console_GetoptLong and is the
+only function you should need to call.
+
+It takes an array where the keys are descriptions of how each option should be
+processed and the values are references to the variable to set when that option
+is supplied on the command line.
+
+The arguments are described in description => reference pairs.
+
+The description is a list of synonyms (separated by | characters), optionally
+followed by a specifier for the arguments to the option.  That specifier starts
+with a = (mandatory) or : (optional), then either i (integer), s (string) or f
+(floating point).  This can also be followed by an @ symbol, meaning to store
+multiple values in an array.  Alternately, the specifier can be +, which means
+that more than one of this option on the command line increments the references
+variable, or !, which means that the option is a flag but also takes a 'no'
+prefix (e.g. --sort and --nosort).
+
+This is best illustrated by examples:
+
+quiet|q          = a simple flag, takes no arguments
+ouput|o=s        = an option with a mandatory string argument
+debug|d:i        = an option with an optional integer argument
+input|i=s@       = take multiple instances, store in array
+verbose|v+       = more -v options increment the verbosity
+warnings!        = takes --warnings and --nowarnings
+
+So we might ask for those arguments to be processed from the command line with
+the following invocation:
+
+$args = Console_GetoptLong::getOptions(array(
+    'quiet|q'       => &$quiet,
+    'verbose|v+'    => &$verbose,
+    'input|i=s@'    => &$inputs,
+    'output|o=s'    => &$output,
+    'debug|d+'      => &$debug,
+    'warnings!'     => &$warnings,
+));
+
+Argument descriptions can be in any order (naturally).  Each option
+can have one or more synonyms, or none.  Both single dash (-) and
+double dash (--) are taken to signify options of any length (i.e.
+the above description allows you to specify -input and --i as well
+as the more usual -i and --input).
+
+If you do not supply a @ descriptor, but reference an array, the items
+will be put into the array automatically (i.e. the argument will be
+treated as if described by @).
+
+Showing help
+============
+
+There is an alternate way of specifying options which includes the ability to
+include help text describing each option:
+
+$args = Console_GetoptLong::getOptions(array(
+    'quiet|q'       => array(
+        'var'   => &$quiet,
+        'help'  => 'Do not show progress'
+    ),
+    'verbose|v+'    => array(
+        'var'   => &$verbose,
+        'help'  => 'Show more processing information'
+    ),
+    'input|i=s@'    => array(
+        'var'   => &$inputs,
+        'help'  => 'One or more input files'
+    ),
+    'output|o=s'    => array(
+        'var'   => &$output,
+        'help'  => 'Output file'
+    ),
+    'debug|d+'      => array(
+        'var'   => &$debug,
+        'help'  => 'Turn on full debugging output'
+    ),
+    'warnings|w!'   => array(
+        'var'   => &$warnings,
+        'help'  => 'Warn on processing glitches'
+    ),
+));
+
+If any option has this format, it will be treated as if there is an invisible
+extra description:
+
+    'help|w!'      => array(
+        'var'   => &$help,
+        'help'  => 'This help'
+    ),
+
+that then causes GetOptions to produce the associated help information for
+each option with a 'help' option supplied.  Options using the standard format
+(i.e. description => variable reference) will not get help produced; this is
+useful for 'hidden' options such as debugging or admin options that should not
+be shown to regular users.
+
+Returned values
+===============
+
+getOptions returns the remaining list of command line parameters that
+weren't options or their arguments.  These can occur anywhere in the
+command line, so (with the above argument description) it would be
+valid to call the related program with the arguments:
+
+-v -v --mode convert_to_proteins viruses1.fasta -o viruses.prot viruses2.fasta
+
+Which would then return an array with the elements 'viruses1.fasta' and
+'viruses2.fasta'
+
+

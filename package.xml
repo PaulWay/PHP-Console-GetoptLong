@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Console_GetoptLong</name>
+ <channel>pear.php.net</channel>
+ <summary>A command-line arguments parser in the style of Perl's Getopt::Long</summary>
+ <description>Getopt::Long allows you to specify command line arguments with
+ simple descriptions and link them directly to the variable you want to store
+ the result of that option.  It supports flags, mandatory and optional
+ arguments, incrementing flags, and multiple values stored in arrays.  Each
+ option can have one or more synonyms.</description>
+ <lead>
+  <name>Paul Wayper</name>
+  <user>paulway</user>
+  <email>paulway@mabula.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2012-11-24</date>
+ <time>13:03:00</time>
+ <version>
+  <release>1.9.9</release>
+  <api>1.1</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license/3_01.txt">PHP</license>
+ <notes>We now accept the agglomerated -iii as a synonym for -i -i -i in incrementing options.</notes>
+ <contents>
+  <dir name="/">
+   <file name="Console/GetoptLong.php" role="php">
+    <tasks:replace from="@package_version@" to="version" type="package-info" />
+   </file>
+   <file baseinstalldir="/tests" name="tests/getopt_long_test.pl" role="test" />
+   <file baseinstalldir="/tests" name="tests/getopt_long_tests.txt" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_setup.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_noargs.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_flag.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_single.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_integer.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_array_explicit.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_mandatory_array_implicit.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_optional_single.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_optional_integer.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_optional_array_explicit.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_optional_array_implicit.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_increment.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_negatable.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_help.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_help_own.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_unknown_option_handling.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_single_agglom.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_ordered_unflagged.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test_ordered_unflagged_last.php" role="test" />
+   <file baseinstalldir="/tests" name="tests/test.sh" role="test" />
+   <file baseinstalldir="/" name="README" role="doc" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>4.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>1.9.9</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-09-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now accept the agglomerated -iii as a synonym for -i -i -i in incrementing options.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.8</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-09-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Auto-generated help also includes its own help options.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.7</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-09-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Ordered unflagged options can also be '-1', meaning the last option
+    (however long the argument list is).</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.6</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-08-04</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Detect environment variable to turn on debugging on the fly.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.5</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-08-04</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Ordered unflagged options can now be specified with _1 .. _9 - these
+ pick arguments off the command line after flagged options are processed.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.4</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-07-11</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Single letter options can now be 'agglomerated' as options - for
+ example, -c -a -t can be specified as -cat (or --tca).</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.3</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-05-07</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>The caller can can now pass an array of 'arguments' to process instead of
+   reading them only from the command line.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.2</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-03-22</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now recognise single-letter options in option-and-argument format
+    - e.g. -fout.txt, -w640.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.1</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-03-15</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now provide a function to set the behaviour on unrecognised
+   options (i.e. arguments starting with dashes) - ignore them, warn on them,
+   or discard them.  The default behaviour (which is preserved) is to store them
+   in the returned array as unprocessed command line arguments</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.9.0</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-03-10</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Handle -option=argument and optional arguments with array targets.
+   This involved combining some code, making the processing a bit cleaner and
+   reducing copy-and-paste.  We also now check that the test files are in
+   subversion as well as this package.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.7.1</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-29</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Dashes found within options are OK (e.g. read-from-file).</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.7.0</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-29</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Added the generation of tests that check that the files used in these
+   tests are also mentioned in the package.xml file.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.6.5</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-29</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Missed test file out of package.</notes>
+  </release>  
+  <release>
+   <version>
+    <release>1.6.4</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-01</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Warn if help is supplied in the target of an option, and either 'h' or 'help'
+ are supplied as synonyms (i.e. we can do one, or the other, but not both).</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.6.3</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-02-01</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Do not generate help if the caller has specified their own help option.</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.6.2</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-25</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now check and warn for duplicate synonyms.</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.6.1</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-25</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Added the other test files to the package.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.6.0</release>
+    <api>1.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-25</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We can now pass in arrays with 'help' and 'var' keys, and automatically
+  generate a usage output.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-18</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>Several improvements:
+* negatable flags (e.g. --flag and --noflag)
+* better variable name ($opt doesn't have two meanings in main loop)
+* testing of argument description parse failures
+</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-14</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>We now actually check the arguments are the type required</notes>
+  </release>
+  <release>
+   <version>
+    <release>1.3.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-13</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP 3.01</license>
+   <notes>
+Incorporating style changes from Greg Sherwood to match PHP's preferred
+coding style.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.2.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-01-12</date>
+   <license uri="http://www.php.net/license/3_01.txt">PHP</license>
+   <notes>
+Trying to actually make a real PEAR package.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.1.1</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2011-12-21</date>
+   <license uri="http://www.gnu.org/licenses/gpl-3.0.txt">GPL</license>
+   <notes>
+Added explicit and implicit array argument storage, and rearranged tests.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0</release>
+    <api>1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2011-12-20</date>
+   <license uri="http://www.gnu.org/licenses/gpl-3.0.txt">GPL</license>
+   <notes>
+Initial release
+   </notes>
+  </release>
+ </changelog>
+</package>
