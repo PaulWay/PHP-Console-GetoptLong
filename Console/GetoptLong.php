@@ -46,7 +46,7 @@ class Console_GetoptLong
      *
      * @return none
      */
-    private function _debug($string)
+    private static function _debug($string)
     {
         if (Console_GetoptLong::$_debug) {
             echo $string;
@@ -93,7 +93,7 @@ class Console_GetoptLong
      *
      * @return none
      */
-    function setUnknownOptionHandling($method = 'arg')
+    public static function setUnknownOptionHandling($method = 'arg')
     {
         if ($method == 'arg' or $method == 'ignore'
             or $method == 'warn' or $method == 'die'
@@ -119,7 +119,7 @@ class Console_GetoptLong
      *
      * @return none
      */
-    function setAllowMultipleOptionsCheck($allow = true)
+    public static function setAllowMultipleOptionsCheck($allow = true)
     {
         Console_GetoptLong::$_allowMultiOptCheck = $allow;
     }
@@ -132,7 +132,7 @@ class Console_GetoptLong
      *
      * @return boolean whether the argument is of the specified type.
      */
-    private function _checkType($arg, $type)
+    private static function _checkType($arg, $type)
     {
         if ($type == 's') {
             Console_GetoptLong::_debug("  Checking $arg is a string - duh\n");
@@ -160,7 +160,7 @@ class Console_GetoptLong
      * @return none
      */
     
-    private function _showHelp($argHelp)
+    private static function _showHelp($argHelp)
     {
         echo "Usage: $_SERVER[PHP_SELF] options...\n";
         // Add the actual help option to the help descriptions
@@ -206,7 +206,7 @@ class Console_GetoptLong
      * 
      * @return boolean whether all the letters were single-letter options
      */
-    private function _checkMultiOpts($arg_lookup, $str)
+    private static function _checkMultiOpts($arg_lookup, $str)
     {
         Console_GetoptLong::_debug("   Checking '$str' for agglomerated flags\n");
         for ($c = 0; $c < strlen($str); $c++) {
@@ -247,7 +247,7 @@ class Console_GetoptLong
      *
      * @return none
      */
-    private function _setVariable($optInfo, $option, $argument)
+    private static function _setVariable($optInfo, $option, $argument)
     {
         Console_GetoptLong::_debug(
             " at _setVariable([" . implode(',', array_keys($optInfo)) 
@@ -316,7 +316,7 @@ class Console_GetoptLong
      *
      * @return none
      */
-    private function _incrementOption($optInfo, $option)
+    private static function _incrementOption($optInfo, $option)
     {
         $optInfo['var'] ++;
         Console_GetoptLong::_debug(
@@ -344,7 +344,7 @@ class Console_GetoptLong
      *
      * @return none
      */
-    private function _setOrderedUnflaggedArgument(
+    private static function _setOrderedUnflaggedArgument(
         $pos, $optInfo, &$unprocessedArgs, $argDesc
     ) {
         Console_GetoptLong::_debug(
@@ -490,7 +490,7 @@ class Console_GetoptLong
      *
      */
     
-    function getOptions($argDescriptions, Array $args = Array())
+    public static function getOptions($argDescriptions, Array $args = Array())
     {
         // Set debug if environment requests it
         if (getenv('Console_GetoptLong_Debug')) {
